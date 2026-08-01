@@ -28,11 +28,14 @@ from core import dashboard_data as dd
 
 # --------------------------------------------------------------------------- #
 OUTPUT_HTML = os.path.join(PROJECT_ROOT, "wc1_dashboard.html")   # project root
-API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyCqqXYgttY-VrgIEiJykkYTV97m9q1UO2A")
+API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
 # --------------------------------------------------------------------------- #
 
 
 def main():
+    if not API_KEY:
+        print("WARNING: GOOGLE_MAPS_API_KEY is not set — set it in .env "
+              "(see .env.example) or the map won't load.")
     wc1, counts, estates, months, center = dd.load_wc1()
     html = (TEMPLATE
             .replace("__API_KEY__", API_KEY)

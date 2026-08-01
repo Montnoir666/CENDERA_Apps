@@ -35,9 +35,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-insecure-secret-change-me")
 
-GOOGLE_MAPS_API_KEY = os.environ.get(
-    "GOOGLE_MAPS_API_KEY", "AIzaSyCqqXYgttY-VrgIEiJykkYTV97m9q1UO2A"
-)
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
 DATA_ROOT = os.path.join(PROJECT_ROOT, "data", "Agronomic Assessment")
 
 
@@ -119,4 +117,7 @@ if __name__ == "__main__":
     if not os.path.exists(auth.ACCOUNTS_XLSX):
         print(f"WARNING: {auth.ACCOUNTS_XLSX} not found — run "
               f"scripts/setup_accounts.py first, or nobody will be able to log in.")
+    if not GOOGLE_MAPS_API_KEY:
+        print("WARNING: GOOGLE_MAPS_API_KEY is not set — set it in .env "
+              "(see .env.example) or the map won't load.")
     app.run(host="0.0.0.0", port=port, debug=debug)
