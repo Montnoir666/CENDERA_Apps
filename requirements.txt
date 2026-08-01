@@ -1,0 +1,5 @@
+pandas
+openpyxl
+Flask
+python-dotenv
+gunicorn

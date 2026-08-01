@@ -1,0 +1,16 @@
+# Generated / bulk data — not source
+# NOTE: outputs/ is intentionally NOT ignored — the live app reads
+# outputs/WC1_agronomic_assessment_synced.xlsx at runtime, so it needs to be
+# committed for a git-based deploy (e.g. Render) to have any data to serve.
+wc1_dashboard.html
+__pycache__/
+*.pyc
+
+# Local secrets — never commit real SECRET_KEY
+.env
+
+# Login credentials (plaintext passwords) — never commit
+accounts/users.xlsx
+
+# keep the data/ estate folders but ignore the (large) image contents if desired:
+# data/**/*.jpg
