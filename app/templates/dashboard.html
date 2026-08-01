@@ -11,7 +11,9 @@
   }
   html,body{height:100%;margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);}
   #navbar{height:58px;background:var(--panel);display:flex;align-items:stretch;border-bottom:1px solid var(--border);}
-  .brand{display:flex;flex-direction:column;justify-content:center;gap:1px;padding:0 20px;border-right:1px solid var(--border);}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--border);}
+  .brand .logo{color:var(--gold);flex:0 0 auto;}
+  .brand-text{display:flex;flex-direction:column;justify-content:center;gap:1px;}
   .brand .word{font-size:17px;font-weight:800;letter-spacing:2px;color:var(--gold);}
   .brand .tag{font-size:10px;color:var(--muted);letter-spacing:0.3px;}
   nav.tabs{display:flex;align-items:stretch;}
@@ -91,7 +93,15 @@
 </head>
 <body>
 <div id="navbar">
-  <div class="brand"><span class="word">CENDERA</span><span class="tag">by Cendera Technologies</span></div>
+  <div class="brand">
+    <svg class="logo" width="28" height="32" viewBox="0 0 100 116" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M50 6 L87 27 L87 73 L50 94 L13 73 L13 27 Z"/>
+      <path d="M26 46 L50 24 L74 46" stroke-width="8"/>
+      <path d="M35 64 L50 48 L65 64" stroke-width="8"/>
+      <path d="M50 64 L50 92" stroke-width="8"/>
+    </svg>
+    <div class="brand-text"><span class="word">CENDERA</span><span class="tag">by Cendera Technologies</span></div>
+  </div>
   <nav class="tabs">
     <button id="t_wc1" class="active" onclick="showTab('wc1')">WC1 Assessment</button>
     <button id="t_bunch" onclick="showTab('bunch')">Bunch Development</button>
