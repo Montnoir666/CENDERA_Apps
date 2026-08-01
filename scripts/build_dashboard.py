@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Build the 3-tab dashboard (WC1 Assessment | Bunch Development | Yield).
+Build the 3-tab dashboard (Agronomic Assessment | Bunch Development | Yield Map).
 
 WC1 tab (REAL): markers by assessment type, ESTATE + MONTH dropdowns, type
 toggles, and a frame IMAGE popup (loaded from frame_relpath).
@@ -85,9 +85,9 @@ TEMPLATE = r"""<!DOCTYPE html>
 </head>
 <body>
 <div id="tabs">
-  <button id="t_wc1" class="active" onclick="showTab('wc1')">WC1 Assessment</button>
+  <button id="t_wc1" class="active" onclick="showTab('wc1')">Agronomic Assessment</button>
   <button id="t_bunch" onclick="showTab('bunch')">Bunch Development</button>
-  <button id="t_yield" onclick="showTab('yield')">Yield</button>
+  <button id="t_yield" onclick="showTab('yield')">Yield Map</button>
 </div>
 
 <div id="v_wc1" class="view active">

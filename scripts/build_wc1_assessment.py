@@ -3,8 +3,9 @@
 """
 WC1 sync: match retained frames (folders) with metadata (CSV) -> workbook.
 
-Now estate-aware. It scans:  data/<Estate>/**/DJI_*   (flight folders)
-falling back to a flat scan of the current folder if data/ has none.
+Estate-aware, and scoped to the Agronomic Assessment tab's data. It scans:
+  data/Agronomic Assessment/<Estate>/**/DJI_*   (flight folders)
+falling back to a flat scan of the current folder if that has none.
 
 Adds columns:
     estate            (from the data/<Estate>/ folder)
@@ -86,7 +87,7 @@ def read_metadata(path):
 def discover_flights(base):
     """Return list of (flight_name, flight_path, estate)."""
     flights = []
-    data_root = os.path.join(base, "data")
+    data_root = os.path.join(base, "data", "Agronomic Assessment")
     if os.path.isdir(data_root):
         for estate in sorted(os.listdir(data_root)):
             ep = os.path.join(data_root, estate)

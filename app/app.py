@@ -3,8 +3,8 @@
 """
 CENDERA — by Cendera Technologies
 
-Login-gated Flask app serving the WC1 Assessment / Bunch Development / Yield
-dashboard. Config comes from environment variables (see .env.example) and
+Login-gated Flask app serving the Agronomic Assessment / Bunch Development /
+Yield Map dashboard. Config comes from environment variables (see .env.example) and
 accounts/users.xlsx (see auth.py) so the same code can later run on a remote
 host without changes.
 
@@ -38,7 +38,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-only-insecure-secret-change-m
 GOOGLE_MAPS_API_KEY = os.environ.get(
     "GOOGLE_MAPS_API_KEY", "AIzaSyCqqXYgttY-VrgIEiJykkYTV97m9q1UO2A"
 )
-DATA_ROOT = os.path.join(PROJECT_ROOT, "data")
+DATA_ROOT = os.path.join(PROJECT_ROOT, "data", "Agronomic Assessment")
 
 
 def login_required(view):

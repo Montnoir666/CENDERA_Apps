@@ -98,9 +98,9 @@
     <div class="brand-text"><span class="word">CENDERA</span><span class="tag">by Cendera Technologies</span></div>
   </div>
   <nav class="tabs">
-    <button id="t_wc1" class="active" onclick="showTab('wc1')">WC1 Assessment</button>
+    <button id="t_wc1" class="active" onclick="showTab('wc1')">Agronomic Assessment</button>
     <button id="t_bunch" onclick="showTab('bunch')">Bunch Development</button>
-    <button id="t_yield" onclick="showTab('yield')">Yield</button>
+    <button id="t_yield" onclick="showTab('yield')">Yield Map</button>
   </nav>
   <div class="spacer"></div>
   <div class="userbox">
@@ -221,7 +221,7 @@ function initMap(){
       map: maps.wc1, title: m.type, icon: circle(WC1_COLORS[m.type] || "#888", 7)});
     mk.addListener("click", () => {
       const img = m.img
-        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"></div>'
+        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\/Agronomic Assessment\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"></div>'
         : '';
       iw1.setContent(
         '<div class="iw">' + img +

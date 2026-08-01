@@ -5,7 +5,7 @@ One-time bootstrap for accounts/users.xlsx — the editable login/estate-access
 sheet CENDERA reads from (see app/auth.py).
 
 Creates 2 admin accounts (see everything) plus one example estate-scoped
-account per existing data/<estate>/ folder. Safe to re-run: if
+account per existing data/Agronomic Assessment/<estate>/ folder. Safe to re-run: if
 accounts/users.xlsx already exists, it's left untouched (delete it yourself
 first if you want a fresh bootstrap — your edits are never overwritten).
 
@@ -24,7 +24,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ACCOUNTS_DIR = os.path.join(PROJECT_ROOT, "accounts")
 OUTPUT_FILE = os.path.join(ACCOUNTS_DIR, "users.xlsx")
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+DATA_DIR = os.path.join(PROJECT_ROOT, "data", "Agronomic Assessment")
 ROLE_OPTIONS = ["admin", "user"]
 COLUMNS = ["username", "password", "role", "estates"]
 
