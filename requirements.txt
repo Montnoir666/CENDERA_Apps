@@ -3,3 +3,4 @@ openpyxl
 Flask
 python-dotenv
 gunicorn
+requests

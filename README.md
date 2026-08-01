@@ -111,6 +111,20 @@ directly**: `accounts/users.xlsx` (columns `username`, `password`, `role`,
   dropdown only ever shows their own estate(s)) and on the frame-image URLs
   (`/media/<estate>/...` 404s if that estate isn't in the requester's list).
 
+**Keeping the live site's accounts in sync**: `accounts/users.xlsx` and the
+Render deployment's `users.csv` Secret File are two separate copies (that's
+intentional — passwords never go through git). After editing the local
+spreadsheet, run:
+```bash
+python scripts/sync_accounts_to_render.py
+```
+This converts `users.xlsx` to CSV, pushes it to Render via their API, and
+triggers a redeploy (Render doesn't hot-swap secret files into an already
+running instance, so a redeploy is required for the change to actually take
+effect). One-time setup: add `RENDER_API_KEY` (Render dashboard → Account
+Settings → API Keys → Create API Key) and `RENDER_SERVICE_ID` (the `srv-...`
+id in the service's dashboard URL) to `.env` — see `.env.example`.
+
 Also set a real `SECRET_KEY` in `.env` (copy from `.env.example`; see its
 comment for how to generate one) before this is ever reachable outside your
 own machine — without it, sessions can be forged.
