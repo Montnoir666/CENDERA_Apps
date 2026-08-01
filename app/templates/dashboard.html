@@ -75,9 +75,11 @@
   .iw{width:224px;font-family:Arial,sans-serif;}
   .iw .thumb{position:relative;margin:-14px -14px 8px;height:118px;overflow:hidden;border-radius:8px 8px 0 0;background:#eee;}
   .iw .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-  .iw .badge{position:absolute;top:8px;left:8px;background:#16181A;color:#C9A227;font-size:9.5px;
-    font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.2px;}
-  .iw .title{font-weight:700;font-size:13px;color:#16181A;margin:2px 0 1px;}
+  .iw .badge{background:#16181A;color:#C9A227;font-size:9.5px;
+    font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.2px;display:inline-block;}
+  .iw .title{font-weight:700;font-size:13.5px;color:#16181A;margin:2px 0 4px;line-height:1.3;}
+  .iw .coord{display:inline-block;background:#16181A;color:#C9A227;font-weight:700;font-size:11px;
+    padding:3px 8px;border-radius:5px;margin-bottom:6px;}
   .iw .subtitle{font-size:10.5px;color:#777;margin-bottom:8px;}
   .iw .stats{display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid #eee;padding-top:7px;margin-top:2px;}
   .iw .stats span{display:flex;align-items:center;gap:4px;font-size:10px;color:#555;}
@@ -203,11 +205,12 @@ function initMap(){
       map: maps.wc1, title: m.type, icon: circle(WC1_COLORS[m.type] || "#888", 7)});
     mk.addListener("click", () => {
       const img = m.img
-        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"><span class="badge">' + m.type + '</span></div>'
-        : '<div class="badge" style="position:static;display:inline-block;margin-bottom:6px;">' + m.type + '</div>';
+        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"></div>'
+        : '';
       iw1.setContent(
         '<div class="iw">' + img +
-        '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+        '<div class="title">' + m.type + '</div>' +
+        '<div class="coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
         '<div class="subtitle">' + m.estate + ' &middot; ' + m.month + '</div>' +
         (m.remarks ? '<div class="remarks">' + m.remarks + '</div>' : '') +
         '<div class="stats">' +
