@@ -10,7 +10,7 @@
   .card{background:#E9EFDC;border:1.5px solid #1F4D36;border-radius:12px;padding:36px 40px;width:320px;
     box-shadow:0 8px 28px rgba(27,46,34,0.18);text-align:center;}
   .wordmark-row{display:flex;align-items:center;justify-content:center;gap:10px;}
-  .wordmark-row svg{color:#C9A227;flex:0 0 auto;}
+  .wordmark-row img{flex:0 0 auto;}
   .wordmark{font-size:30px;font-weight:800;letter-spacing:3px;color:#C9A227;margin:0;}
   .tagline{color:#5C7267;font-size:12px;margin:4px 0 28px;letter-spacing:0.5px;}
   .field{text-align:left;margin-bottom:16px;}
@@ -30,12 +30,7 @@
 <div class="wrap">
   <div class="card">
     <div class="wordmark-row">
-      <svg width="30" height="35" viewBox="0 0 100 116" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M50 6 L87 27 L87 73 L50 94 L13 73 L13 27 Z"/>
-        <path d="M26 46 L50 24 L74 46" stroke-width="8"/>
-        <path d="M35 64 L50 48 L65 64" stroke-width="8"/>
-        <path d="M50 64 L50 92" stroke-width="8"/>
-      </svg>
+      <img src="{{ url_for('static', filename='cendera_logo_black.png') }}" alt="CENDERA logo" width="30" height="35">
       <p class="wordmark">CENDERA</p>
     </div>
     <p class="tagline">by Cendera Technologies</p>

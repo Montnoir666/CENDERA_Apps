@@ -11,6 +11,8 @@ __pycache__/
 
 # Login credentials (plaintext passwords) — never commit
 accounts/users.xlsx
+accounts/~$*
+~$*
 
 # keep the data/ estate folders but ignore the (large) image contents if desired:
 # data/**/*.jpg
