@@ -4,86 +4,164 @@
 <meta charset="utf-8"/>
 <title>CENDERA — Oil Palm WC Dashboard</title>
 <style>
-  html,body{height:100%;margin:0;font-family:Arial,sans-serif;}
-  #tabs{height:50px;background:#16181A;display:flex;align-items:stretch;}
-  .brand{display:flex;align-items:center;gap:10px;padding:0 18px 0 16px;border-right:1px solid #262a2e;}
-  .brand .word{font-size:17px;font-weight:800;letter-spacing:2px;color:#C9A227;}
-  .brand .tag{font-size:10px;color:#75797e;letter-spacing:0.3px;}
-  #tabs button{background:none;border:none;color:#bbb;font-size:14px;padding:0 20px;
-    cursor:pointer;border-bottom:3px solid transparent;}
-  #tabs button.active{color:#C9A227;border-bottom-color:#C9A227;font-weight:bold;}
+  :root{
+    --bg:#0f1113; --panel:#16181A; --panel2:#1E2124; --border:#2b2f33;
+    --text:#e6e6e6; --muted:#8a8f96; --gold:#C9A227; --gold-soft:rgba(201,162,39,0.14);
+  }
+  html,body{height:100%;margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);}
+  #navbar{height:58px;background:var(--panel);display:flex;align-items:stretch;border-bottom:1px solid var(--border);}
+  .brand{display:flex;flex-direction:column;justify-content:center;gap:1px;padding:0 20px;border-right:1px solid var(--border);}
+  .brand .word{font-size:17px;font-weight:800;letter-spacing:2px;color:var(--gold);}
+  .brand .tag{font-size:10px;color:var(--muted);letter-spacing:0.3px;}
+  nav.tabs{display:flex;align-items:stretch;}
+  nav.tabs button{background:none;border:none;color:#bbb;font-size:13.5px;padding:0 22px;
+    cursor:pointer;border-bottom:3px solid transparent;font-family:inherit;}
+  nav.tabs button.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:bold;}
   .spacer{flex:1;}
-  .userbox{display:flex;align-items:center;gap:12px;padding:0 18px;color:#bbb;font-size:12px;}
-  .userbox a{color:#C9A227;text-decoration:none;}
-  .userbox a:hover{text-decoration:underline;}
-  .view{position:absolute;top:50px;left:0;right:0;bottom:0;display:none;}
-  .view.active{display:block;}
+  .userbox{display:flex;align-items:center;gap:10px;padding:0 20px;}
+  .avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--panel);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:0 0 auto;}
+  .who{display:flex;flex-direction:column;line-height:1.3;}
+  .who .name{color:#eee;font-size:12px;font-weight:700;}
+  .who .scope{color:var(--muted);font-size:10.5px;}
+  .userbox a.logout{color:var(--gold);text-decoration:none;font-size:11.5px;margin-left:6px;white-space:nowrap;}
+  .userbox a.logout:hover{text-decoration:underline;}
+
+  #body{display:flex;height:calc(100% - 58px);}
+  #sidebar{width:270px;flex:0 0 270px;background:var(--panel);border-right:1px solid var(--border);
+    overflow-y:auto;padding:18px 16px 24px;box-sizing:border-box;}
+  .side{display:none;}
+  .side.active{display:block;}
+  .sidebar-title{font-size:10.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);
+    margin:0 0 9px;font-weight:700;}
+  .sidebar-section{margin-bottom:20px;}
+
+  .search-box{display:flex;align-items:center;background:var(--panel2);border:1px solid var(--border);
+    border-radius:8px;padding:8px 10px;gap:8px;}
+  .search-box svg{flex:0 0 auto;color:var(--muted);}
+  .search-box input{background:none;border:none;outline:none;color:var(--text);font-size:12.5px;width:100%;
+    font-family:inherit;}
+
+  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .type-card{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px 6px;
+    text-align:center;cursor:pointer;user-select:none;}
+  .type-card .swatch{width:24px;height:24px;border-radius:50%;margin:0 auto 6px;border:2px solid rgba(255,255,255,0.15);}
+  .type-card .label{font-size:10px;color:#c8ccd0;line-height:1.25;}
+  .type-card .count{font-size:9.5px;color:var(--muted);margin-top:2px;}
+  .type-card.active{background:var(--gold-soft);border-color:var(--gold);}
+  .type-card.active .label{color:var(--gold);font-weight:700;}
+
+  select.side-select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);
+    background:var(--panel2);color:var(--text);font-size:12.5px;margin-bottom:2px;font-family:inherit;}
+
+  .side-btns{display:flex;gap:8px;margin-top:10px;}
+  .side-btns button{flex:1;padding:7px 0;border-radius:8px;border:1px solid var(--border);
+    background:var(--panel2);color:#c8ccd0;font-size:11px;cursor:pointer;font-family:inherit;}
+  .side-btns button:hover{border-color:var(--gold);color:var(--gold);}
+
+  .hint{font-size:11px;color:var(--muted);line-height:1.5;}
+  .legend-row{display:flex;align-items:center;gap:9px;font-size:12px;color:#c8ccd0;margin:9px 0;}
+  .dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);flex:0 0 auto;}
+
+  #map-wrap{flex:1;position:relative;}
+  .mapview{position:absolute;inset:0;display:none;}
+  .mapview.active{display:block;}
   .map{width:100%;height:100%;}
-  .panel{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.96);
-    padding:12px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);
-    font-size:13px;max-width:290px;z-index:5;}
-  .panel h3{margin:0 0 8px 0;font-size:14px;}
-  .panel label{display:flex;align-items:center;gap:8px;margin:5px 0;cursor:pointer;}
-  .panel select{width:100%;margin:2px 0 8px;padding:4px;font-size:13px;}
-  .dot{width:14px;height:14px;border-radius:50%;border:1px solid #333;flex:0 0 auto;}
-  .panel .btns{margin-top:8px;display:flex;gap:6px;}
-  .panel button{font-size:11px;padding:3px 7px;cursor:pointer;}
-  .sub{color:#666;font-size:11px;}
   .banner{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:6;
     background:#D7263D;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;
     font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
-  .iw{font-size:12px;line-height:1.6;max-width:270px;}
-  .iw .coord{display:inline-block;background:#1E2124;color:#C9A227;font-weight:bold;
-    padding:2px 6px;border-radius:4px;margin:4px 0;}
-  .iw img{max-width:250px;max-height:180px;display:block;margin:6px 0;border:1px solid #ccc;border-radius:4px;}
+
+  /* marker popup card */
+  .iw{width:224px;font-family:Arial,sans-serif;}
+  .iw .thumb{position:relative;margin:-14px -14px 8px;height:118px;overflow:hidden;border-radius:8px 8px 0 0;background:#eee;}
+  .iw .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .iw .badge{position:absolute;top:8px;left:8px;background:#16181A;color:#C9A227;font-size:9.5px;
+    font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.2px;}
+  .iw .title{font-weight:700;font-size:13px;color:#16181A;margin:2px 0 1px;}
+  .iw .subtitle{font-size:10.5px;color:#777;margin-bottom:8px;}
+  .iw .stats{display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid #eee;padding-top:7px;margin-top:2px;}
+  .iw .stats span{display:flex;align-items:center;gap:4px;font-size:10px;color:#555;}
+  .iw .stats svg{flex:0 0 auto;color:#999;}
+  .iw .remarks{font-size:11px;color:#444;margin-top:7px;line-height:1.4;}
 </style>
 </head>
 <body>
-<div id="tabs">
+<div id="navbar">
   <div class="brand"><span class="word">CENDERA</span><span class="tag">by Cendera Technologies</span></div>
-  <button id="t_wc1" class="active" onclick="showTab('wc1')">WC1 Assessment</button>
-  <button id="t_bunch" onclick="showTab('bunch')">Bunch Development</button>
-  <button id="t_yield" onclick="showTab('yield')">Yield</button>
+  <nav class="tabs">
+    <button id="t_wc1" class="active" onclick="showTab('wc1')">WC1 Assessment</button>
+    <button id="t_bunch" onclick="showTab('bunch')">Bunch Development</button>
+    <button id="t_yield" onclick="showTab('yield')">Yield</button>
+  </nav>
   <div class="spacer"></div>
-  <div class="userbox">{{ username }} ({{ scope_label }}) &middot; <a href="{{ url_for('logout') }}">Log out</a></div>
-</div>
-
-<div id="v_wc1" class="view active">
-  <div id="map_wc1" class="map"></div>
-  <div class="panel">
-    <h3>Agronomic assessment</h3>
-    <div class="sub">Estate</div><select id="f_estate" onchange="recomputeWc1()"></select>
-    <div class="sub">Assessment month</div><select id="f_month" onchange="recomputeWc1()"></select>
-    <div id="wc1_toggles"></div>
-    <div class="btns">
-      <button onclick="setAllWc1(true)">Show all</button>
-      <button onclick="setAllWc1(false)">Hide all</button>
+  <div class="userbox">
+    <div class="avatar">{{ username[0]|upper }}</div>
+    <div class="who">
+      <span class="name">{{ username }}</span>
+      <span class="scope">{{ scope_label }}</span>
     </div>
-    <div class="sub" style="margin-top:8px;">Click a marker to see its coordinate and frame image.</div>
+    <a class="logout" href="{{ url_for('logout') }}">Log out</a>
   </div>
 </div>
 
-<div id="v_bunch" class="view">
-  <div id="map_bunch" class="map"></div>
-  <div class="banner">MOCK DATA &mdash; placeholder for WC2 (not real)</div>
-  <div class="panel">
-    <h3>Days to ripe (predicted)</h3>
-    <div><span class="dot" style="background:#D7263D"></span> Ripe now (0-3 d)</div>
-    <div><span class="dot" style="background:#F17105"></span> Near-ripe (4-10 d)</div>
-    <div><span class="dot" style="background:#F2C200"></span> Developing (11-21 d)</div>
-    <div><span class="dot" style="background:#2E8B57"></span> Early (&gt;21 d)</div>
-  </div>
-</div>
+<div id="body">
+  <div id="sidebar">
+    <div id="side_wc1" class="side active">
+      <div class="sidebar-section">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="f_search" type="text" placeholder="Search remarks or frame..." oninput="recomputeWc1()">
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Assessment type</div>
+        <div id="wc1_toggles" class="type-grid"></div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Estate</div>
+        <select id="f_estate" class="side-select" onchange="recomputeWc1()"></select>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Assessment month</div>
+        <select id="f_month" class="side-select" onchange="recomputeWc1()"></select>
+        <div class="side-btns">
+          <button onclick="setAllWc1(true)">Show all</button>
+          <button onclick="setAllWc1(false)">Hide all</button>
+        </div>
+      </div>
+      <div class="hint">Click a marker to see its coordinate and frame image.</div>
+    </div>
 
-<div id="v_yield" class="view">
-  <div id="map_yield" class="map"></div>
-  <div class="banner">MOCK DATA &mdash; placeholder for WC4 (not real)</div>
-  <div class="panel">
-    <h3>Predicted yield (kg/palm)</h3>
-    <div><span class="dot" style="background:#C7E9C0"></span> Low (&lt;120)</div>
-    <div><span class="dot" style="background:#74C476"></span> Mid (120-170)</div>
-    <div><span class="dot" style="background:#238B45"></span> High (&gt;170)</div>
-    <div class="sub" style="margin-top:6px;">Circle size scales with yield.</div>
+    <div id="side_bunch" class="side">
+      <div class="sidebar-title">Days to ripe (predicted)</div>
+      <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe now (0&ndash;3 d)</div>
+      <div class="legend-row"><span class="dot" style="background:#F17105"></span> Near-ripe (4&ndash;10 d)</div>
+      <div class="legend-row"><span class="dot" style="background:#F2C200"></span> Developing (11&ndash;21 d)</div>
+      <div class="legend-row"><span class="dot" style="background:#2E8B57"></span> Early (&gt;21 d)</div>
+      <div class="hint" style="margin-top:14px;">Placeholder data for WC2 &mdash; not a real prediction yet.</div>
+    </div>
+
+    <div id="side_yield" class="side">
+      <div class="sidebar-title">Predicted yield (kg/palm)</div>
+      <div class="legend-row"><span class="dot" style="background:#C7E9C0"></span> Low (&lt;120)</div>
+      <div class="legend-row"><span class="dot" style="background:#74C476"></span> Mid (120&ndash;170)</div>
+      <div class="legend-row"><span class="dot" style="background:#238B45"></span> High (&gt;170)</div>
+      <div class="hint" style="margin-top:14px;">Circle size scales with yield. Placeholder data for WC4 &mdash; not a real prediction yet.</div>
+    </div>
+  </div>
+
+  <div id="map-wrap">
+    <div id="v_wc1" class="mapview active">
+      <div id="map_wc1" class="map"></div>
+    </div>
+    <div id="v_bunch" class="mapview">
+      <div id="map_bunch" class="map"></div>
+      <div class="banner">MOCK DATA &mdash; placeholder for WC2 (not real)</div>
+    </div>
+    <div id="v_yield" class="mapview">
+      <div id="map_yield" class="map"></div>
+      <div class="banner">MOCK DATA &mdash; placeholder for WC4 (not real)</div>
+    </div>
   </div>
 </div>
 
@@ -96,6 +174,10 @@ const MONTHS = {{ months|tojson }};
 const BUNCH = {{ bunch_markers|tojson }};
 const YIELD = {{ yield_markers|tojson }};
 const CENTER = {{ center|tojson }};
+
+const ICON_PIN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>';
+const ICON_CAL = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>';
+const ICON_FILM = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="4" x2="8" y2="20"/><line x1="16" y1="4" x2="16" y2="20"/><line x1="3" y1="9" x2="8" y2="9"/><line x1="3" y1="15" x2="8" y2="15"/><line x1="16" y1="9" x2="21" y2="9"/><line x1="16" y1="15" x2="21" y2="15"/></svg>';
 
 const maps = {};
 let wc1Recs = [];
@@ -120,16 +202,23 @@ function initMap(){
     const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng},
       map: maps.wc1, title: m.type, icon: circle(WC1_COLORS[m.type] || "#888", 7)});
     mk.addListener("click", () => {
-      const img = m.img ? '<img src="/media/' + m.img.replace(/^data\//, "") + '" alt="frame" onerror="this.style.display=\'none\'">' : '';
-      iw1.setContent('<div class="iw"><strong>' + m.type + '</strong>' +
-        '<div class="coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' + img +
-        (m.remarks ? 'Remarks: ' + m.remarks + '<br/>' : '') +
-        'Estate: ' + m.estate + ' | Month: ' + m.month + '<br/>' +
-        'Frame: ' + m.frame + '<br/>Video: ' + m.video + '<br/>' +
-        (m.dt ? 'Time: ' + m.dt : '') + '</div>');
+      const img = m.img
+        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"><span class="badge">' + m.type + '</span></div>'
+        : '<div class="badge" style="position:static;display:inline-block;margin-bottom:6px;">' + m.type + '</div>';
+      iw1.setContent(
+        '<div class="iw">' + img +
+        '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+        '<div class="subtitle">' + m.estate + ' &middot; ' + m.month + '</div>' +
+        (m.remarks ? '<div class="remarks">' + m.remarks + '</div>' : '') +
+        '<div class="stats">' +
+          '<span>' + ICON_FILM + ' ' + m.frame + '</span>' +
+          (m.dt ? '<span>' + ICON_CAL + ' ' + m.dt + '</span>' : '') +
+        '</div></div>'
+      );
       iw1.open({anchor: mk, map: maps.wc1});
     });
-    wc1Recs.push({marker: mk, type: m.type, estate: m.estate, month: m.month});
+    wc1Recs.push({marker: mk, type: m.type, estate: m.estate, month: m.month,
+                   remarks: (m.remarks || "").toLowerCase(), frame: (m.frame || "").toLowerCase()});
   });
 
   fillSelect("f_estate", ESTATES);
@@ -139,11 +228,17 @@ function initMap(){
   Object.keys(WC1_COUNTS).forEach(t => {
     typeState[t] = true;
     const id = "cb_" + t.replace(/[^a-z0-9]/gi, "");
-    const row = document.createElement("label");
-    row.innerHTML = '<input type="checkbox" id="' + id + '" checked>' +
-      '<span class="dot" style="background:' + WC1_COLORS[t] + '"></span>' + t + ' (' + WC1_COUNTS[t] + ')';
-    tg.appendChild(row);
-    row.querySelector("input").addEventListener("change", e => { typeState[t] = e.target.checked; recomputeWc1(); });
+    const card = document.createElement("div");
+    card.className = "type-card active";
+    card.id = id;
+    card.innerHTML = '<div class="swatch" style="background:' + WC1_COLORS[t] + '"></div>' +
+      '<div class="label">' + t + '</div><div class="count">' + WC1_COUNTS[t] + '</div>';
+    card.addEventListener("click", () => {
+      typeState[t] = !typeState[t];
+      card.classList.toggle("active", typeState[t]);
+      recomputeWc1();
+    });
+    tg.appendChild(card);
   });
 
   maps.bunch = new google.maps.Map(document.getElementById("map_bunch"),
@@ -153,9 +248,10 @@ function initMap(){
     const c = m.days <= 3 ? "#D7263D" : m.days <= 10 ? "#F17105" : m.days <= 21 ? "#F2C200" : "#2E8B57";
     const mk = new google.maps.Marker({position: {lat: m.lat, lng: m.lng}, map: maps.bunch, icon: circle(c, 7), title: m.stage});
     mk.addListener("click", () => {
-      iw2.setContent('<div class="iw"><strong>' + m.stage + '</strong>' +
-        '<div class="coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
-        'Palm: ' + m.palm + '<br/>Predicted days to ripe: <b>' + m.days + '</b><br/><span style="color:#D7263D">(mock value)</span></div>');
+      iw2.setContent('<div class="iw"><div class="badge" style="position:static;display:inline-block;margin-bottom:6px;">' + m.stage + '</div>' +
+        '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+        '<div class="subtitle">Palm ' + m.palm + '</div>' +
+        '<div class="remarks">Predicted days to ripe: <b>' + m.days + '</b><br/><span style="color:#D7263D">(mock value)</span></div></div>');
       iw2.open({anchor: mk, map: maps.bunch});
     });
   });
@@ -168,9 +264,9 @@ function initMap(){
     const mk = new google.maps.Marker({position: {lat: m.lat, lng: m.lng}, map: maps.yield,
       icon: circle(c, 5 + (m.yield_kg - 80) / 140 * 8), title: m.palm});
     mk.addListener("click", () => {
-      iw3.setContent('<div class="iw"><strong>Palm ' + m.palm + '</strong>' +
-        '<div class="coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
-        'Predicted yield: <b>' + m.yield_kg + ' kg</b><br/><span style="color:#D7263D">(mock value)</span></div>');
+      iw3.setContent('<div class="iw"><div class="badge" style="position:static;display:inline-block;margin-bottom:6px;">Palm ' + m.palm + '</div>' +
+        '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+        '<div class="remarks">Predicted yield: <b>' + m.yield_kg + ' kg</b><br/><span style="color:#D7263D">(mock value)</span></div></div>');
       iw3.open({anchor: mk, map: maps.yield});
     });
   });
@@ -181,12 +277,14 @@ function initMap(){
 function recomputeWc1(){
   const est = document.getElementById("f_estate").value;
   const mon = document.getElementById("f_month").value;
+  const q = document.getElementById("f_search").value.trim().toLowerCase();
   const bounds = new google.maps.LatLngBounds();
   let shown = 0;
   wc1Recs.forEach(r => {
     const vis = (typeState[r.type] !== false)
       && (est === "__all" || r.estate === est)
-      && (mon === "__all" || r.month === mon);
+      && (mon === "__all" || r.month === mon)
+      && (!q || r.remarks.includes(q) || r.frame.includes(q));
     r.marker.setVisible(vis);
     if (vis){ bounds.extend(r.marker.getPosition()); shown++; }
   });
@@ -197,6 +295,7 @@ function showTab(name){
   ["wc1","bunch","yield"].forEach(n => {
     document.getElementById("v_" + n).classList.toggle("active", n === name);
     document.getElementById("t_" + n).classList.toggle("active", n === name);
+    document.getElementById("side_" + n).classList.toggle("active", n === name);
   });
   const m = maps[name];
   if (m) setTimeout(() => {
@@ -208,8 +307,8 @@ function showTab(name){
 function setAllWc1(v){
   Object.keys(typeState).forEach(t => {
     typeState[t] = v;
-    const cb = document.getElementById("cb_" + t.replace(/[^a-z0-9]/gi, ""));
-    if (cb) cb.checked = v;
+    const card = document.getElementById("cb_" + t.replace(/[^a-z0-9]/gi, ""));
+    if (card) card.classList.toggle("active", v);
   });
   recomputeWc1();
 }
