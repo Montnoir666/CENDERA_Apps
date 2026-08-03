@@ -113,6 +113,7 @@ def main():
         sys.exit("No DJI_* flight folders found (neither under data/ nor flat).")
 
     all_rows = []
+    flight_counts = []
     frame_col_used = None
 
     for name, fpath, estate in sorted(flights, key=lambda x: (x[2], x[0])):
@@ -155,6 +156,10 @@ def main():
         print(f"[ok]  {estate}/{name}: {len(img_keys)} imgs, {len(df)} rows -> "
               f"{len(matched)} matched")
         all_rows.append(matched)
+        flight_counts.append({
+            "estate": estate, "source_folder": name,
+            "frames_captured": len(df), "frames_retained": len(matched),
+        })
 
     if not all_rows:
         sys.exit("Nothing matched. Check frame-filename column / FRAME_COL_OVERRIDE.")
@@ -193,11 +198,11 @@ def main():
     print(f"Months:  {sorted(out['assessment_month'].unique())}")
     print(f"Frame column used: '{frame_col_used}'")
 
-    write_excel(out, os.path.join(base, OUTPUT_FILE))
+    write_excel(out, flight_counts, os.path.join(base, OUTPUT_FILE))
     print(f"Wrote: {os.path.join(base, OUTPUT_FILE)}")
 
 
-def write_excel(df, path):
+def write_excel(df, flight_counts, path):
     wb = Workbook()
     ws = wb.active
     ws.title = "assessment"
@@ -235,6 +240,18 @@ def write_excel(df, path):
             w = 32
         ws.column_dimensions[L].width = w
     ws.freeze_panes = "A2"
+
+    fc_ws = wb.create_sheet("flight_counts")
+    fc_cols = ["estate", "source_folder", "frames_captured", "frames_retained"]
+    for j, c in enumerate(fc_cols, start=1):
+        cell = fc_ws.cell(row=1, column=j, value=c)
+        cell.fill = fill
+        cell.font = hf
+    for i, row in enumerate(flight_counts, start=2):
+        for j, c in enumerate(fc_cols, start=1):
+            fc_ws.cell(row=i, column=j, value=row[c])
+    for j, c in enumerate(fc_cols, start=1):
+        fc_ws.column_dimensions[get_column_letter(j)].width = max(14, len(c) + 2)
 
     try:
         wb.save(path)

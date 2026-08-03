@@ -9,8 +9,12 @@
     --text:#F3F1E6; --muted:#A9C2AE; --gold:#C9A227; --gold-soft:rgba(201,162,39,0.20);
     --text-dark:#1B2E22; --muted-on-light:#5C7267; --border-light:#CFE0C4; --white:#FFFFFF;
   }
+  *{box-sizing:border-box;}
   html,body{height:100%;margin:0;font-family:Arial,sans-serif;background:var(--white);color:var(--text-dark);}
-  #navbar{height:58px;background:var(--bg);display:flex;align-items:stretch;border-bottom:1px solid var(--border-light);}
+  button,input,select{font-family:inherit;}
+
+  /* ---------- navbar ---------- */
+  #navbar{height:58px;background:var(--bg);display:flex;align-items:stretch;border-bottom:1px solid var(--border-light);flex:0 0 auto;}
   .brand{display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--border-light);}
   .brand .logo{color:var(--gold);flex:0 0 auto;}
   .brand-text{display:flex;flex-direction:column;justify-content:center;gap:1px;}
@@ -21,53 +25,64 @@
     cursor:pointer;border-bottom:3px solid transparent;font-family:inherit;}
   nav.tabs button.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:bold;}
   .spacer{flex:1;}
-  .userbox{display:flex;align-items:center;gap:10px;padding:0 20px;}
+  .bell{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;
+    border-radius:50%;cursor:pointer;color:var(--panel);flex:0 0 auto;}
+  .bell:hover{background:var(--gold-soft);}
+  .userbox{display:flex;align-items:center;gap:10px;padding:0 16px 0 8px;}
   .avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--panel);
     display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:0 0 auto;}
   .who{display:flex;flex-direction:column;line-height:1.3;}
   .who .name{color:var(--text-dark);font-size:12px;font-weight:700;}
   .who .scope{color:var(--muted-on-light);font-size:10.5px;}
-  .userbox a.logout{color:var(--panel);text-decoration:none;font-size:11.5px;margin-left:6px;white-space:nowrap;font-weight:700;}
-  .userbox a.logout:hover{color:var(--gold);text-decoration:underline;}
+  .userbox a.logout{color:var(--gold);text-decoration:none;font-size:11.5px;margin-left:6px;white-space:nowrap;font-weight:700;}
+  .userbox a.logout:hover{text-decoration:underline;}
 
-  #body{display:flex;height:calc(100% - 58px);}
-  #sidebar{width:270px;flex:0 0 270px;background:var(--white);border-right:1px solid var(--border-light);
-    overflow-y:auto;padding:18px 16px 24px;box-sizing:border-box;}
-  .side{display:none;}
-  .side.active{display:block;}
-  .sidebar-title{font-size:10.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--panel);
-    margin:0 0 9px;font-weight:700;}
-  .sidebar-section{margin-bottom:20px;}
+  /* ---------- app body ---------- */
+  #appbody{display:flex;height:calc(100% - 58px);}
 
-  .search-box{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--panel);
-    border-radius:8px;padding:8px 10px;gap:8px;}
-  .search-box svg{flex:0 0 auto;color:var(--muted-on-light);}
-  .search-box input{background:none;border:none;outline:none;color:var(--text-dark);font-size:12.5px;width:100%;
-    font-family:inherit;}
+  /* ---------- left nav ---------- */
+  #leftnav{width:190px;flex:0 0 190px;background:var(--panel);display:flex;flex-direction:column;
+    padding:14px 10px;overflow-y:auto;}
+  #leftnav .navitem{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+    color:var(--text);font-size:12.5px;cursor:pointer;margin-bottom:3px;background:none;border:none;
+    width:100%;text-align:left;}
+  #leftnav .navitem svg{flex:0 0 auto;color:var(--muted);}
+  #leftnav .navitem.active{background:var(--gold-soft);color:var(--gold);}
+  #leftnav .navitem.active svg{color:var(--gold);}
+  #leftnav .navitem:not(.active):hover{background:rgba(255,255,255,0.06);}
+  #leftnav .navdivider{height:1px;background:var(--border);margin:10px 4px;}
+  #leftnav .navlabel{font-size:9.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);
+    padding:0 12px;margin:4px 0 6px;}
+  #leftnav .navnotice{margin-top:auto;font-size:10.5px;color:var(--muted);padding:8px 12px;line-height:1.5;}
 
-  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .type-card{background:var(--bg);border:1.5px solid var(--panel);border-radius:10px;padding:10px 6px;
-    text-align:center;cursor:pointer;user-select:none;}
-  .type-card .swatch{width:28px;height:28px;border-radius:50%;margin:0 auto 6px;border:2px solid rgba(255,255,255,0.2);
-    display:flex;align-items:center;justify-content:center;}
-  .type-card .label{font-size:10px;color:var(--panel);line-height:1.25;}
-  .type-card .count{font-size:9.5px;color:var(--muted-on-light);margin-top:2px;}
-  .type-card.active{background:var(--gold-soft);border-color:var(--gold);}
-  .type-card.active .label{color:#8A6A10;font-weight:700;}
+  /* ---------- main scroll area ---------- */
+  #main{flex:1;overflow-y:auto;background:var(--bg);}
+  .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--panel);color:var(--text);
+    padding:9px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .toast.show{opacity:1;}
 
-  select.side-select{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--panel);
-    background:var(--bg);color:var(--text-dark);font-size:12.5px;margin-bottom:2px;font-family:inherit;}
+  .view{display:none;}
+  .view.active{display:block;}
 
-  .side-btns{display:flex;gap:8px;margin-top:10px;}
-  .side-btns button{flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--panel);
-    background:var(--bg);color:var(--text-dark);font-size:11px;cursor:pointer;font-family:inherit;}
-  .side-btns button:hover{border-color:var(--gold);color:#8A6A10;background:var(--gold-soft);}
+  /* ---------- KPI row ---------- */
+  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:18px 20px 0;}
+  .kpi-card{background:var(--white);border-radius:16px;padding:16px 18px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
+    display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .kpi-card.total{background:var(--panel);color:var(--text);}
+  .kpi-card .kpi-top{display:flex;align-items:center;gap:8px;}
+  .kpi-card .kpi-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .kpi-card .kpi-label{font-size:11px;color:var(--muted-on-light);line-height:1.3;}
+  .kpi-card.total .kpi-label{color:var(--muted);}
+  .kpi-card .kpi-num{font-size:30px;font-weight:800;color:var(--text-dark);line-height:1;}
+  .kpi-card.total .kpi-num{color:var(--gold);}
+  .kpi-card .kpi-sub{font-size:10.5px;color:var(--muted-on-light);}
+  .kpi-card.total .kpi-sub{color:var(--muted);}
 
-  .hint{font-size:11px;color:var(--panel);line-height:1.5;}
-  .legend-row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--panel);margin:9px 0;}
-  .dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);flex:0 0 auto;}
-
-  #map-wrap{flex:1;position:relative;}
+  /* ---------- content row: map + detail panel ---------- */
+  .content-row{display:flex;gap:16px;padding:16px 20px 0;align-items:stretch;}
+  .map-col{flex:3;min-width:0;position:relative;background:var(--white);border-radius:16px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(27,46,34,0.08);height:480px;}
   .mapview{position:absolute;inset:0;display:none;}
   .mapview.active{display:block;}
   .map{width:100%;height:100%;}
@@ -75,19 +90,112 @@
     background:#D7263D;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;
     font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
 
-  /* marker popup card */
+  .map-btn{position:absolute;z-index:7;background:var(--white);border:1px solid var(--border-light);
+    border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;color:var(--text-dark);cursor:pointer;
+    display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+  #btn-filters{top:14px;left:14px;}
+  #btn-layers{top:14px;right:54px;}
+  #btn-fullscreen{top:14px;right:14px;padding:8px;}
+
+  #filters-drawer{position:absolute;top:0;left:0;bottom:0;width:270px;background:var(--white);z-index:9;
+    box-shadow:4px 0 20px rgba(0,0,0,0.15);padding:16px;overflow-y:auto;transform:translateX(-100%);
+    transition:transform .2s;}
+  #filters-drawer.open{transform:translateX(0);}
+  #filters-drawer .fd-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  #filters-drawer .fd-head h3{margin:0;font-size:14px;color:var(--text-dark);}
+  #filters-drawer .fd-close{cursor:pointer;color:var(--muted-on-light);background:none;border:none;font-size:16px;}
+  .sidebar-title{font-size:10.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--panel);
+    margin:0 0 9px;font-weight:700;}
+  .sidebar-section{margin-bottom:18px;}
+  .search-box{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--panel);
+    border-radius:8px;padding:8px 10px;gap:8px;}
+  .search-box svg{flex:0 0 auto;color:var(--muted-on-light);}
+  .search-box input{background:none;border:none;outline:none;color:var(--text-dark);font-size:12.5px;width:100%;}
+  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .type-card{background:var(--bg);border:1.5px solid var(--panel);border-radius:10px;padding:10px 6px;
+    text-align:center;cursor:pointer;user-select:none;}
+  .type-card .swatch{width:26px;height:26px;border-radius:50%;margin:0 auto 6px;border:2px solid rgba(255,255,255,0.2);
+    display:flex;align-items:center;justify-content:center;}
+  .type-card .label{font-size:9.5px;color:var(--panel);line-height:1.25;}
+  .type-card .count{font-size:9px;color:var(--muted-on-light);margin-top:2px;}
+  .type-card.active{background:var(--gold-soft);border-color:var(--gold);}
+  .type-card.active .label{color:#8A6A10;font-weight:700;}
+  select.side-select{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--panel);
+    background:var(--bg);color:var(--text-dark);font-size:12.5px;margin-bottom:2px;}
+  .side-btns{display:flex;gap:8px;margin-top:10px;}
+  .side-btns button{flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--panel);
+    background:var(--bg);color:var(--text-dark);font-size:11px;cursor:pointer;}
+  .side-btns button:hover{border-color:var(--gold);color:#8A6A10;background:var(--gold-soft);}
+  .legend-row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--panel);margin:9px 0;}
+  .dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);flex:0 0 auto;}
+  .hint{font-size:11px;color:var(--panel);line-height:1.5;}
+
+  #layers-menu{position:absolute;top:52px;right:54px;z-index:8;background:var(--white);border-radius:10px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.18);padding:8px;display:none;min-width:130px;}
+  #layers-menu.open{display:block;}
+  #layers-menu button{display:block;width:100%;text-align:left;background:none;border:none;padding:7px 10px;
+    border-radius:6px;font-size:12px;color:var(--text-dark);cursor:pointer;}
+  #layers-menu button:hover{background:var(--bg);}
+
+  /* ---------- detail panel ---------- */
+  .detail-col{flex:1.1;min-width:270px;background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
+    padding:18px;overflow-y:auto;height:480px;}
+  .detail-col h3{margin:0 0 12px;font-size:13px;color:var(--text-dark);}
+  .detail-empty{color:var(--muted-on-light);font-size:12.5px;line-height:1.6;text-align:center;padding:40px 10px;}
+  .detail-empty svg{display:block;margin:0 auto 10px;color:var(--border-light);}
+  .detail-thumb{width:100%;height:150px;border-radius:10px;overflow:hidden;background:#eee;margin-bottom:10px;}
+  .detail-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+  .detail-badge{display:inline-block;background:var(--panel);color:var(--gold);font-weight:700;font-size:10px;
+    padding:3px 9px;border-radius:5px;margin-bottom:8px;}
+  .detail-coord{display:inline-block;background:var(--bg);color:var(--panel);font-weight:700;font-size:11.5px;
+    padding:4px 10px;border-radius:6px;margin-bottom:10px;}
+  .detail-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted-on-light);
+    padding:6px 0;border-bottom:1px solid var(--bg);}
+  .detail-row b{color:var(--text-dark);font-weight:600;}
+  .detail-remarks{font-size:12.5px;color:var(--text-dark);margin:10px 0;line-height:1.5;
+    background:var(--bg);padding:10px 12px;border-radius:10px;}
+
+  /* ---------- secondary row: AI / trend / distribution ---------- */
+  .secondary-row{display:flex;gap:16px;padding:16px 20px 0;flex-wrap:wrap;}
+  .card{background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);padding:16px 18px;flex:1;min-width:260px;}
+  .card h3{margin:0 0 4px;font-size:13.5px;color:var(--text-dark);}
+  .card .card-sub{font-size:10.5px;color:var(--muted-on-light);margin-bottom:12px;}
+
+  .ai-list{list-style:none;margin:0;padding:0;}
+  .ai-list li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--muted-on-light);
+    padding:8px 0;border-bottom:1px solid var(--bg);}
+  .ai-list li:last-child{border-bottom:none;}
+  .ai-progress-badge{display:inline-block;background:var(--gold-soft);color:#8A6A10;font-size:10px;
+    font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+
+  .legend-inline{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;}
+  .legend-inline span{font-size:11px;color:var(--muted-on-light);display:flex;align-items:center;gap:5px;}
+
+  /* ---------- flight summary ---------- */
+  .flight-section{padding:16px 20px 24px;}
+  .flight-table-wrap{background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
+    overflow-x:auto;padding:6px;}
+  table.flight-table{border-collapse:collapse;width:100%;font-size:12px;}
+  table.flight-table th{text-align:left;color:var(--muted-on-light);font-weight:700;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:0.4px;padding:12px 14px;border-bottom:2px solid var(--bg);white-space:nowrap;}
+  table.flight-table td{padding:11px 14px;border-bottom:1px solid var(--bg);color:var(--text-dark);white-space:nowrap;}
+  table.flight-table tr:last-child td{border-bottom:none;}
+  table.flight-table td.muted{color:var(--muted-on-light);}
+
+  /* ---------- Bunch/Yield legacy panel (unchanged tabs) ---------- */
+  #body-legacy{display:flex;height:100%;}
+  #sidebar-legacy{width:270px;flex:0 0 270px;background:var(--white);border-right:1px solid var(--border-light);
+    overflow-y:auto;padding:18px 16px 24px;}
+  #map-wrap-legacy{flex:1;position:relative;}
+
+  /* ---------- marker popup card (bunch/yield only now) ---------- */
   .iw{width:224px;font-family:Arial,sans-serif;}
-  .iw .thumb{position:relative;margin:-14px -14px 8px;height:150px;overflow:hidden;border-radius:8px 8px 0 0;background:#eee;}
-  .iw .thumb img{width:100%;height:100%;object-fit:contain;display:block;}
-  .iw .badge{background:#1F4D36;color:#C9A227;font-size:9.5px;
+  .iw .badge{background:var(--panel);color:var(--gold);font-size:9.5px;
     font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.2px;display:inline-block;}
   .iw .title{font-weight:700;font-size:13.5px;color:#1B2E22;margin:2px 0 4px;line-height:1.3;}
-  .iw .coord{display:inline-block;background:#1F4D36;color:#C9A227;font-weight:700;font-size:11px;
+  .iw .coord{display:inline-block;background:var(--panel);color:var(--gold);font-weight:700;font-size:11px;
     padding:3px 8px;border-radius:5px;margin-bottom:6px;}
   .iw .subtitle{font-size:10.5px;color:#777;margin-bottom:8px;}
-  .iw .stats{display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid #eee;padding-top:7px;margin-top:2px;}
-  .iw .stats span{display:flex;align-items:center;gap:4px;font-size:10px;color:#555;}
-  .iw .stats svg{flex:0 0 auto;color:#999;}
   .iw .remarks{font-size:11px;color:#444;margin-top:7px;line-height:1.4;}
 </style>
 </head>
@@ -103,6 +211,9 @@
     <button id="t_yield" onclick="showTab('yield')">Yield Map</button>
   </nav>
   <div class="spacer"></div>
+  <div class="bell" onclick="toast('No notifications yet — this is a placeholder for now.')" title="Notifications">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  </div>
   <div class="userbox">
     <div class="avatar">{{ username[0]|upper }}</div>
     <div class="who">
@@ -113,63 +224,198 @@
   </div>
 </div>
 
-<div id="body">
-  <div id="sidebar">
-    <div id="side_wc1" class="side active">
-      <div class="sidebar-section">
-        <div class="search-box">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="f_search" type="text" placeholder="Search remarks or frame..." oninput="recomputeWc1()">
-        </div>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Assessment type</div>
-        <div id="wc1_toggles" class="type-grid"></div>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Estate</div>
-        <select id="f_estate" class="side-select" onchange="recomputeWc1()"></select>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">Assessment month</div>
-        <select id="f_month" class="side-select" onchange="recomputeWc1()"></select>
-        <div class="side-btns">
-          <button onclick="setAllWc1(true)">Show all</button>
-          <button onclick="setAllWc1(false)">Hide all</button>
-        </div>
-      </div>
-      <div class="hint">Click a marker to see its coordinate and frame image.</div>
+<div id="appbody">
+  <div id="leftnav">
+    <div class="navitem active" onclick="return false;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+      Dashboard
     </div>
-
-    <div id="side_bunch" class="side">
-      <div class="sidebar-title">Days to ripe (predicted)</div>
-      <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe now (0&ndash;3 d)</div>
-      <div class="legend-row"><span class="dot" style="background:#F17105"></span> Near-ripe (4&ndash;10 d)</div>
-      <div class="legend-row"><span class="dot" style="background:#F2C200"></span> Developing (11&ndash;21 d)</div>
-      <div class="legend-row"><span class="dot" style="background:#2E8B57"></span> Early (&gt;21 d)</div>
-      <div class="hint" style="margin-top:14px;">Placeholder data for WC2 &mdash; not a real prediction yet.</div>
-    </div>
-
-    <div id="side_yield" class="side">
-      <div class="sidebar-title">Predicted yield (kg/palm)</div>
-      <div class="legend-row"><span class="dot" style="background:#C7E9C0"></span> Low (&lt;120)</div>
-      <div class="legend-row"><span class="dot" style="background:#74C476"></span> Mid (120&ndash;170)</div>
-      <div class="legend-row"><span class="dot" style="background:#238B45"></span> High (&gt;170)</div>
-      <div class="hint" style="margin-top:14px;">Circle size scales with yield. Placeholder data for WC4 &mdash; not a real prediction yet.</div>
-    </div>
+    <div class="navdivider"></div>
+    <div class="navlabel">Coming soon</div>
+    <button class="navitem" onclick="toast('Estates — coming soon.')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><line x1="8" y1="8" x2="8" y2="8.01"/><line x1="12" y1="8" x2="12" y2="8.01"/><line x1="16" y1="8" x2="16" y2="8.01"/><line x1="8" y1="12" x2="8" y2="12.01"/><line x1="12" y1="12" x2="12" y2="12.01"/><line x1="16" y1="12" x2="16" y2="12.01"/></svg>
+      Estates
+    </button>
+    <button class="navitem" onclick="toast('Reports — coming soon.')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+      Reports
+    </button>
+    <button class="navitem" onclick="toast('Users — coming soon.')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Users
+    </button>
+    <button class="navitem" onclick="toast('Settings — coming soon.')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 4.29l.06.06A1.65 1.65 0 0 0 8.92 4.7 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09c0 .69.4 1.31 1 1.51.6.2 1.35.11 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.44.47-.53 1.22-.33 1.82.2.6.82 1 1.51 1H21a2 2 0 0 1 0 4h-.09c-.69 0-1.31.4-1.51 1z"/></svg>
+      Settings
+    </button>
+    <div class="navnotice">Placeholder pages — real content to be designed later.</div>
   </div>
 
-  <div id="map-wrap">
-    <div id="v_wc1" class="mapview active">
-      <div id="map_wc1" class="map"></div>
+  <div id="main">
+    <div class="toast" id="toast"></div>
+
+    <!-- ================= WC1 / Agronomic Assessment ================= -->
+    <div id="view_wc1" class="view active">
+      <div class="kpi-row" id="kpi-row"></div>
+
+      <div class="content-row">
+        <div class="map-col">
+          <div id="v_wc1" class="mapview active">
+            <div id="map_wc1" class="map"></div>
+          </div>
+          <button class="map-btn" id="btn-filters" onclick="toggleFilters()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Filters
+          </button>
+          <button class="map-btn" id="btn-layers" onclick="toggleLayers()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Layers
+          </button>
+          <button class="map-btn" id="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+          <div id="layers-menu">
+            <button onclick="setMapType('wc1','hybrid')">Satellite + labels</button>
+            <button onclick="setMapType('wc1','satellite')">Satellite</button>
+            <button onclick="setMapType('wc1','roadmap')">Roadmap</button>
+          </div>
+
+          <div id="filters-drawer">
+            <div class="fd-head"><h3>Filters</h3><button class="fd-close" onclick="toggleFilters()">&times;</button></div>
+            <div class="sidebar-section">
+              <div class="search-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input id="f_search" type="text" placeholder="Search remarks or frame..." oninput="recomputeWc1()">
+              </div>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Assessment type</div>
+              <div id="wc1_toggles" class="type-grid"></div>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Estate</div>
+              <select id="f_estate" class="side-select" onchange="recomputeWc1()"></select>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Assessment month</div>
+              <select id="f_month" class="side-select" onchange="recomputeWc1()"></select>
+              <div class="side-btns">
+                <button onclick="setAllWc1(true)">Show all</button>
+                <button onclick="setAllWc1(false)">Hide all</button>
+              </div>
+            </div>
+            <div class="hint">Click a marker on the map to see its details on the right.</div>
+          </div>
+        </div>
+
+        <div class="detail-col" id="detail-col">
+          <h3>Selected assessment</h3>
+          <div id="detail-body">
+            <div class="detail-empty">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+              Click a marker on the map<br/>to see its details here.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="secondary-row">
+        <div class="card">
+          <div class="ai-progress-badge">In progress</div>
+          <h3>AI Insights</h3>
+          <div class="card-sub">Automated analysis — not live yet</div>
+          <ul class="ai-list">
+            <li>AI-generated insights for CENDERA are still in development. This panel will surface pattern detection and recommendations once the analysis pipeline is built.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Assessment Trend</h3>
+          <div class="card-sub" id="trend-sub">Real data — grows as new months are added</div>
+          <svg id="trend-chart" width="100%" height="150" viewBox="0 0 340 150" preserveAspectRatio="none"></svg>
+          <div class="legend-inline" id="trend-legend"></div>
+        </div>
+
+        <div class="card">
+          <h3>Assessment Type Distribution</h3>
+          <div class="card-sub">This month</div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <svg id="donut-chart" width="120" height="120" viewBox="0 0 120 120"></svg>
+            <div class="legend-inline" id="donut-legend" style="flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flight-section">
+        <div class="card" style="margin-bottom:0;">
+          <h3>Flight Technical Summary</h3>
+          <div class="card-sub">Real telemetry, scoped to flights with assessment data. Blank cells = no matching telemetry log found.</div>
+          <div class="flight-table-wrap">
+            <table class="flight-table">
+              <thead><tr>
+                <th>Flight</th><th>Date</th><th>Time</th><th>Duration</th>
+                <th>Avg Altitude</th><th>Max Altitude</th><th>Avg Speed</th><th>Avg Signal</th>
+                <th>Frames Captured</th><th>Frames Retained</th>
+              </tr></thead>
+              <tbody>
+                {% for r in flight_rows %}
+                <tr>
+                  <td>{{ r.flight }}</td>
+                  <td>{{ r.date }}</td>
+                  <td>{{ r.time }}</td>
+                  <td class="{{ 'muted' if r.duration_min is none }}">{{ (r.duration_min ~ ' min') if r.duration_min is not none else '—' }}</td>
+                  <td class="{{ 'muted' if r.height_avg_m is none }}">{{ (r.height_avg_m ~ ' m') if r.height_avg_m is not none else '—' }}</td>
+                  <td class="{{ 'muted' if r.height_max_m is none }}">{{ (r.height_max_m ~ ' m') if r.height_max_m is not none else '—' }}</td>
+                  <td class="{{ 'muted' if r.speed_avg_ms is none }}">{{ (r.speed_avg_ms ~ ' m/s') if r.speed_avg_ms is not none else '—' }}</td>
+                  <td class="{{ 'muted' if r.signal_avg_pct is none }}">{{ (r.signal_avg_pct ~ '%') if r.signal_avg_pct is not none else '—' }}</td>
+                  <td>{{ r.frames_captured }}</td>
+                  <td>{{ r.frames_retained }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="v_bunch" class="mapview">
-      <div id="map_bunch" class="map"></div>
-      <div class="banner">MOCK DATA &mdash; placeholder for WC2 (not real)</div>
+
+    <!-- ================= Bunch Development (unchanged legacy layout) ================= -->
+    <div id="view_bunch" class="view">
+      <div id="body-legacy">
+        <div id="sidebar-legacy">
+          <div class="sidebar-title">Days to ripe (predicted)</div>
+          <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe now (0&ndash;3 d)</div>
+          <div class="legend-row"><span class="dot" style="background:#F17105"></span> Near-ripe (4&ndash;10 d)</div>
+          <div class="legend-row"><span class="dot" style="background:#F2C200"></span> Developing (11&ndash;21 d)</div>
+          <div class="legend-row"><span class="dot" style="background:#2E8B57"></span> Early (&gt;21 d)</div>
+          <div class="hint" style="margin-top:14px;">Placeholder data for WC2 &mdash; not a real prediction yet.</div>
+        </div>
+        <div id="map-wrap-legacy">
+          <div id="v_bunch" class="mapview active">
+            <div id="map_bunch" class="map"></div>
+            <div class="banner">MOCK DATA &mdash; placeholder for WC2 (not real)</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="v_yield" class="mapview">
-      <div id="map_yield" class="map"></div>
-      <div class="banner">MOCK DATA &mdash; placeholder for WC4 (not real)</div>
+
+    <!-- ================= Yield Map (unchanged legacy layout) ================= -->
+    <div id="view_yield" class="view">
+      <div id="body-legacy">
+        <div id="sidebar-legacy">
+          <div class="sidebar-title">Predicted yield (kg/palm)</div>
+          <div class="legend-row"><span class="dot" style="background:#C7E9C0"></span> Low (&lt;120)</div>
+          <div class="legend-row"><span class="dot" style="background:#74C476"></span> Mid (120&ndash;170)</div>
+          <div class="legend-row"><span class="dot" style="background:#238B45"></span> High (&gt;170)</div>
+          <div class="hint" style="margin-top:14px;">Circle size scales with yield. Placeholder data for WC4 &mdash; not a real prediction yet.</div>
+        </div>
+        <div id="map-wrap-legacy">
+          <div id="v_yield" class="mapview active">
+            <div id="map_yield" class="map"></div>
+            <div class="banner">MOCK DATA &mdash; placeholder for WC4 (not real)</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -183,12 +429,10 @@ const MONTHS = {{ months|tojson }};
 const BUNCH = {{ bunch_markers|tojson }};
 const YIELD = {{ yield_markers|tojson }};
 const CENTER = {{ center|tojson }};
+const TOTAL_ASSESSMENTS = {{ total_assessments|tojson }};
+const KPIS = {{ kpis|tojson }};
+const TREND_DATA = {{ trend_data|tojson }};
 
-const ICON_PIN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>';
-const ICON_CAL = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>';
-const ICON_FILM = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="4" x2="8" y2="20"/><line x1="16" y1="4" x2="16" y2="20"/><line x1="3" y1="9" x2="8" y2="9"/><line x1="3" y1="15" x2="8" y2="15"/><line x1="16" y1="9" x2="21" y2="9"/><line x1="16" y1="15" x2="21" y2="15"/></svg>';
-
-// Sidebar filter-card glyphs only — map markers stay plain colored circles, unchanged.
 const TYPE_ICONS = {
   "Nutrient Deficiency": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 20A7 7 0 0 1 4 13c0-6 7-11 15-11-1 8-6 15-11 18z"/><path d="M4 13c4 0 8-2 11-6"/></svg>',
   "Pest & Disease": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="8" y="9" width="8" height="10" rx="4"/><path d="M12 9V6"/><circle cx="12" cy="4" r="1.4" fill="#fff" stroke="none"/><path d="M5 12H3M5 16H3M21 12h-2M21 16h-2M8 9 6 7M16 9l2-2"/></svg>',
@@ -196,10 +440,23 @@ const TYPE_ICONS = {
   "Ground Condition": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="12 3 3 8 12 13 21 8 12 3"/><polyline points="3 16 12 21 21 16"/><polyline points="3 12 12 17 21 12"/></svg>',
   "Unclassified": '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="16.5" x2="12.01" y2="16.5"/></svg>',
 };
+const TREND_COLORS = {
+  "Frond Pruning/Canopy Condition": "#2E8B57", "Ground Condition": "#1F6FEB",
+  "Nutrient Deficiency": "#F2C200", "Pest & Disease": "#D7263D", "Unclassified": "#888888",
+};
 
 const maps = {};
 let wc1Recs = [];
 const typeState = {};
+let toastTimer = null;
+
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+}
 
 function circle(color, scale){
   return {path: google.maps.SymbolPath.CIRCLE, fillColor: color, fillOpacity: 0.9,
@@ -212,30 +469,123 @@ function fillSelect(id, values){
   values.forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; s.appendChild(o); });
 }
 
+function toggleFilters(){ document.getElementById("filters-drawer").classList.toggle("open"); }
+function toggleLayers(){ document.getElementById("layers-menu").classList.toggle("open"); }
+function setMapType(name, type){
+  if (maps[name]) maps[name].setMapTypeId(type);
+  document.getElementById("layers-menu").classList.remove("open");
+}
+function toggleFullscreen(){
+  const el = document.querySelector("#view_wc1 .map-col");
+  if (!document.fullscreenElement) el.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+
+function renderKpis(){
+  const row = document.getElementById("kpi-row");
+  const totalCard = document.createElement("div");
+  totalCard.className = "kpi-card total";
+  totalCard.innerHTML = '<div class="kpi-label">Total Assessments</div><div class="kpi-num">' + TOTAL_ASSESSMENTS + '</div><div class="kpi-sub">All estates</div>';
+  row.appendChild(totalCard);
+  KPIS.forEach(k => {
+    const c = document.createElement("div");
+    c.className = "kpi-card";
+    c.innerHTML =
+      '<div class="kpi-top"><div class="kpi-icon" style="background:' + (WC1_COLORS[k.type] || "#888") + '">' + (TYPE_ICONS[k.type] || "") + '</div>' +
+      '<div class="kpi-label">' + k.type + '</div></div>' +
+      '<div class="kpi-num">' + k.count + '</div><div class="kpi-sub">' + k.pct + '% of total</div>';
+    row.appendChild(c);
+  });
+}
+
+function renderDetail(m){
+  const body = document.getElementById("detail-body");
+  const img = m.img
+    ? '<div class="detail-thumb"><img src="/media/' + m.img.replace(/^data\/Agronomic Assessment\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"></div>'
+    : '';
+  body.innerHTML = img +
+    '<div class="detail-badge">' + m.type + '</div><br/>' +
+    '<div class="detail-coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+    '<div class="detail-row"><span>Estate</span><b>' + m.estate + '</b></div>' +
+    '<div class="detail-row"><span>Month</span><b>' + m.month + '</b></div>' +
+    '<div class="detail-row"><span>Frame</span><b>' + m.frame + '</b></div>' +
+    '<div class="detail-row"><span>Video</span><b>' + m.video + '</b></div>' +
+    (m.dt ? '<div class="detail-row"><span>Time</span><b>' + m.dt + '</b></div>' : '') +
+    (m.remarks ? '<div class="detail-remarks">' + m.remarks + '</div>' : '');
+}
+
+function renderDonut(){
+  const svg = document.getElementById("donut-chart");
+  const legend = document.getElementById("donut-legend");
+  const total = Object.values(WC1_COUNTS).reduce((a,b) => a+b, 0) || 1;
+  const cx = 60, cy = 60, r = 46, sw = 18;
+  const circumference = 2 * Math.PI * r;
+  let offset = 0;
+  let svgParts = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="#eee" stroke-width="' + sw + '"/>';
+  Object.keys(WC1_COUNTS).forEach(t => {
+    const n = WC1_COUNTS[t];
+    const frac = n / total;
+    const dash = frac * circumference;
+    svgParts += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + (WC1_COLORS[t]||"#888") +
+      '" stroke-width="' + sw + '" stroke-dasharray="' + dash + ' ' + (circumference-dash) +
+      '" stroke-dashoffset="' + (-offset) + '" transform="rotate(-90 ' + cx + ' ' + cy + ')"/>';
+    offset += dash;
+    const pct = Math.round(frac * 100);
+    const row = document.createElement("span");
+    row.innerHTML = '<span class="dot" style="background:' + (WC1_COLORS[t]||"#888") + '"></span>' + t + ' — ' + n + ' (' + pct + '%)';
+    legend.appendChild(row);
+  });
+  svgParts += '<text x="' + cx + '" y="' + (cy-2) + '" text-anchor="middle" font-size="20" font-weight="800" fill="#1B2E22">' + total + '</text>';
+  svgParts += '<text x="' + cx + '" y="' + (cy+14) + '" text-anchor="middle" font-size="9" fill="#5C7267">Total</text>';
+  svg.innerHTML = svgParts;
+}
+
+function renderTrend(){
+  const svg = document.getElementById("trend-chart");
+  const legend = document.getElementById("trend-legend");
+  const W = 340, H = 150, padL = 28, padB = 20, padT = 10, padR = 10;
+  const months = TREND_DATA.map(d => d.month);
+  const types = Object.keys(WC1_COLORS);
+  let maxVal = 1;
+  TREND_DATA.forEach(d => types.forEach(t => { maxVal = Math.max(maxVal, d.counts[t] || 0); }));
+
+  const x = i => months.length > 1 ? padL + (i/(months.length-1)) * (W-padL-padR) : (padL + (W-padL-padR)/2);
+  const y = v => (H-padB) - (v/maxVal) * (H-padB-padT);
+
+  let parts = '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#eee" stroke-width="1"/>';
+  parts += '<text x="2" y="' + (H-padB+4) + '" font-size="8" fill="#5C7267">0</text>';
+  parts += '<text x="2" y="' + (padT+8) + '" font-size="8" fill="#5C7267">' + maxVal + '</text>';
+
+  types.forEach(t => {
+    const pts = TREND_DATA.map((d,i) => x(i) + "," + y(d.counts[t] || 0));
+    if (months.length === 1) {
+      parts += '<circle cx="' + x(0) + '" cy="' + y(TREND_DATA[0].counts[t]||0) + '" r="4" fill="' + WC1_COLORS[t] + '"/>';
+    } else {
+      parts += '<polyline points="' + pts.join(" ") + '" fill="none" stroke="' + WC1_COLORS[t] + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+    }
+  });
+  months.forEach((m,i) => {
+    parts += '<text x="' + x(i) + '" y="' + (H-4) + '" font-size="8" fill="#5C7267" text-anchor="middle">' + m + '</text>';
+  });
+  svg.innerHTML = parts;
+
+  types.forEach(t => {
+    const row = document.createElement("span");
+    row.innerHTML = '<span class="dot" style="background:' + WC1_COLORS[t] + '"></span>' + t;
+    legend.appendChild(row);
+  });
+  if (months.length < 2) {
+    document.getElementById("trend-sub").textContent = "Only " + months.length + " month of data so far — chart will extend automatically as more months are added.";
+  }
+}
+
 function initMap(){
   maps.wc1 = new google.maps.Map(document.getElementById("map_wc1"),
     {zoom: 19, center: CENTER, mapTypeId: "hybrid"});
-  const iw1 = new google.maps.InfoWindow();
   WC1.forEach(m => {
     const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng},
       map: maps.wc1, title: m.type, icon: circle(WC1_COLORS[m.type] || "#888", 7)});
-    mk.addListener("click", () => {
-      const img = m.img
-        ? '<div class="thumb"><img src="/media/' + m.img.replace(/^data\/Agronomic Assessment\//, "") + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"></div>'
-        : '';
-      iw1.setContent(
-        '<div class="iw">' + img +
-        '<div class="title">' + m.type + '</div>' +
-        '<div class="coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
-        '<div class="subtitle">' + m.estate + ' &middot; ' + m.month + '</div>' +
-        (m.remarks ? '<div class="remarks">' + m.remarks + '</div>' : '') +
-        '<div class="stats">' +
-          '<span>' + ICON_FILM + ' ' + m.frame + '</span>' +
-          (m.dt ? '<span>' + ICON_CAL + ' ' + m.dt + '</span>' : '') +
-        '</div></div>'
-      );
-      iw1.open({anchor: mk, map: maps.wc1});
-    });
+    mk.addListener("click", () => renderDetail(m));
     wc1Recs.push({marker: mk, type: m.type, estate: m.estate, month: m.month,
                    remarks: (m.remarks || "").toLowerCase(), frame: (m.frame || "").toLowerCase()});
   });
@@ -247,10 +597,10 @@ function initMap(){
   Object.keys(WC1_COUNTS).forEach(t => {
     typeState[t] = true;
     const id = "cb_" + t.replace(/[^a-z0-9]/gi, "");
+    const icon = TYPE_ICONS[t] || '';
     const card = document.createElement("div");
     card.className = "type-card active";
     card.id = id;
-    const icon = TYPE_ICONS[t] || '';
     card.innerHTML = '<div class="swatch" style="background:' + WC1_COLORS[t] + '">' + icon + '</div>' +
       '<div class="label">' + t + '</div><div class="count">' + WC1_COUNTS[t] + '</div>';
     card.addEventListener("click", () => {
@@ -291,6 +641,9 @@ function initMap(){
     });
   });
 
+  renderKpis();
+  renderDonut();
+  renderTrend();
   recomputeWc1();
 }
 
@@ -313,9 +666,8 @@ function recomputeWc1(){
 
 function showTab(name){
   ["wc1","bunch","yield"].forEach(n => {
-    document.getElementById("v_" + n).classList.toggle("active", n === name);
+    document.getElementById("view_" + n).classList.toggle("active", n === name);
     document.getElementById("t_" + n).classList.toggle("active", n === name);
-    document.getElementById("side_" + n).classList.toggle("active", n === name);
   });
   const m = maps[name];
   if (m) setTimeout(() => {
@@ -332,6 +684,13 @@ function setAllWc1(v){
   });
   recomputeWc1();
 }
+
+document.addEventListener("click", (e) => {
+  const menu = document.getElementById("layers-menu");
+  if (menu.classList.contains("open") && !menu.contains(e.target) && e.target.id !== "btn-layers" && !e.target.closest("#btn-layers")) {
+    menu.classList.remove("open");
+  }
+});
 </script>
 <script async src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"></script>
 </body>

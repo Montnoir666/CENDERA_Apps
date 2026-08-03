@@ -29,6 +29,7 @@ sys.path.insert(0, PROJECT_ROOT)
 
 import auth
 from core import dashboard_data as dd
+from core import flight_data as fd
 
 load_dotenv()
 
@@ -80,6 +81,21 @@ def index(user):
     allowed = allowed_estates_for(user)
     wc1, counts, estates, months, center = dd.load_wc1(allowed_estates=allowed)
     scope_label = "All estates" if allowed is None else (", ".join(allowed) or "No estates assigned")
+
+    total = len(wc1)
+    kpis = [{"type": t, "count": n, "pct": round(n / total * 100, 1) if total else 0}
+            for t, n in counts.items()]
+
+    trend = {}
+    for m in wc1:
+        bucket = trend.setdefault(m["month"], {})
+        bucket[m["type"]] = bucket.get(m["type"], 0) + 1
+    trend_data = [{"month": mo, "counts": trend[mo]} for mo in sorted(trend)]
+
+    flight_rows = []
+    for est in estates:
+        flight_rows.extend(fd.flight_summary(est))
+
     return render_template(
         "dashboard.html",
         username=session["user"],
@@ -93,6 +109,10 @@ def index(user):
         bunch_markers=dd.mock_bunch(center),
         yield_markers=dd.mock_yield(center),
         center=center,
+        total_assessments=total,
+        kpis=kpis,
+        trend_data=trend_data,
+        flight_rows=flight_rows,
     )
 
 
