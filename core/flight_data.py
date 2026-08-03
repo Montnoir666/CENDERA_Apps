@@ -1,39 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Flight telemetry loading + per-flight aggregation.
+Flight telemetry lookup + per-flight summary for the dashboard.
 
-Telemetry lives in data/Flight Telemetry/<estate>/*.xlsx (raw DJI flight-log
-exports, one row per ~0.1s of flight). This matches those rows to the
-DJI_<date><time>_<seq>_D flight folders used by build_wc1_assessment.py /
-core/dashboard_data.py, keyed on the date+time embedded in both naming
-schemes:
+The raw DJI flight-log exports (data/Flight Telemetry/<estate>/*.xlsx) run
+90,000+ rows and take 10-20+ seconds to parse — far too slow to read on
+every dashboard page load, and a real risk of a request timeout on a
+slower host. scripts/build_flight_summary.py does that slow parse once,
+offline, and writes a small summary (a few KB, one row per flight) to
+outputs/flight_telemetry_summary.xlsx. This module only ever reads that
+small summary at runtime — it never touches the raw 90k-row files.
 
+Re-run scripts/build_flight_summary.py whenever telemetry exports change.
+
+Matching key: date+time embedded in both naming schemes —
     Telemetry Source_File: DJIFlightRecord_YYYY-MM-DD_[HH-MM-SS]-aircraft.csv
     Flight folder:         DJI_YYYYMMDDHHMMSS_<seq>_D
 
 Only flights that already have real assessment data (i.e. appear in
 outputs/WC1_agronomic_assessment_synced.xlsx's flight_counts sheet) are
 summarized — telemetry for flights with no matching assessment data yet
-(e.g. later, unreviewed flights) is intentionally left out.
+is intentionally left out.
 """
 
 import os
 import re
-import glob
 import pandas as pd
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TELEMETRY_DIR = os.path.join(PROJECT_ROOT, "data", "Flight Telemetry")
+SUMMARY_XLSX = os.path.join(PROJECT_ROOT, "outputs", "flight_telemetry_summary.xlsx")
 OUTPUT_XLSX = os.path.join(PROJECT_ROOT, "outputs", "WC1_agronomic_assessment_synced.xlsx")
 
-_SRC_RE = re.compile(r"DJIFlightRecord_(\d{4})-(\d{2})-(\d{2})_\[(\d{2})-(\d{2})-(\d{2})\]")
 _FOLDER_RE = re.compile(r"DJI_(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})_")
-
-
-def _source_file_key(name):
-    m = _SRC_RE.search(str(name))
-    return "".join(m.groups()) if m else None
 
 
 def _folder_key(folder_name):
@@ -43,25 +41,20 @@ def _folder_key(folder_name):
 
 def load_telemetry(estate):
     """Returns {datetime_key: {duration_s, height_avg_m, height_max_m,
-    speed_avg_ms, signal_avg_pct}} for one estate, or {} if none found."""
-    est_dir = os.path.join(TELEMETRY_DIR, estate)
-    if not os.path.isdir(est_dir):
+    speed_avg_ms, signal_avg_pct}} for one estate, from the precomputed
+    summary. {} if the summary hasn't been built yet."""
+    if not os.path.exists(SUMMARY_XLSX):
         return {}
-    files = glob.glob(os.path.join(est_dir, "*.xlsx"))
-    if not files:
-        return {}
-    df = pd.concat([pd.read_excel(f) for f in files], ignore_index=True)
-    df["_key"] = df["Source_File"].map(_source_file_key)
-    df = df.dropna(subset=["_key"])
-
+    df = pd.read_excel(SUMMARY_XLSX, sheet_name="flight_telemetry_summary")
+    df = df[df["estate"] == estate]
     out = {}
-    for key, g in df.groupby("_key"):
-        out[key] = {
-            "duration_s": float(g["Time_s"].max() - g["Time_s"].min()),
-            "height_avg_m": float(g["Height_m"].mean()),
-            "height_max_m": float(g["Height_m"].max()),
-            "speed_avg_ms": float(g["Speed_ms"].mean()),
-            "signal_avg_pct": float(g["Signal_Video"].mean()),
+    for _, r in df.iterrows():
+        out[str(r["datetime_key"])] = {
+            "duration_s": float(r["duration_s"]),
+            "height_avg_m": float(r["height_avg_m"]),
+            "height_max_m": float(r["height_max_m"]),
+            "speed_avg_ms": float(r["speed_avg_ms"]),
+            "signal_avg_pct": float(r["signal_avg_pct"]),
         }
     return out
 

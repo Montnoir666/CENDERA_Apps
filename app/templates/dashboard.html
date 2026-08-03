@@ -5,7 +5,7 @@
 <title>CENDERA — Oil Palm WC Dashboard</title>
 <style>
   :root{
-    --bg:#E9EFDC; --panel:#1F4D36; --panel2:#28563E; --border:#376B4C;
+    --bg:#E9EFDC; --panel:#163625; --panel2:#1E4A32; --border:#2C5A3E;
     --text:#F3F1E6; --muted:#A9C2AE; --gold:#C9A227; --gold-soft:rgba(201,162,39,0.20);
     --text-dark:#1B2E22; --muted-on-light:#5C7267; --border-light:#CFE0C4; --white:#FFFFFF;
   }
@@ -15,11 +15,11 @@
 
   /* ---------- navbar ---------- */
   #navbar{height:58px;background:var(--bg);display:flex;align-items:stretch;border-bottom:1px solid var(--border-light);flex:0 0 auto;}
-  .brand{display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--border-light);}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 20px;flex:0 0 190px;background:var(--panel);}
   .brand .logo{color:var(--gold);flex:0 0 auto;}
   .brand-text{display:flex;flex-direction:column;justify-content:center;gap:1px;}
   .brand .word{font-size:17px;font-weight:800;letter-spacing:2px;color:var(--gold);}
-  .brand .tag{font-size:10px;color:var(--muted-on-light);letter-spacing:0.3px;}
+  .brand .tag{font-size:10px;color:var(--muted);letter-spacing:0.3px;}
   nav.tabs{display:flex;align-items:stretch;}
   nav.tabs button{background:none;border:none;color:var(--muted-on-light);font-size:13.5px;padding:0 22px;
     cursor:pointer;border-bottom:3px solid transparent;font-family:inherit;}
@@ -137,10 +137,11 @@
     border-radius:6px;font-size:12px;color:var(--text-dark);cursor:pointer;}
   #layers-menu button:hover{background:var(--bg);}
 
-  /* ---------- detail panel ---------- */
-  .detail-col{flex:1.1;min-width:270px;background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
-    padding:18px;overflow-y:auto;height:480px;}
-  .detail-col h3{margin:0 0 12px;font-size:13px;color:var(--text-dark);}
+  /* ---------- detail panel (floating, bottom-right) ---------- */
+  .detail-col{position:fixed;bottom:20px;right:20px;width:300px;max-height:min(60vh,460px);
+    background:var(--white);border-radius:16px;box-shadow:0 10px 32px rgba(0,0,0,0.22);
+    padding:16px;overflow-y:auto;z-index:40;}
+  .detail-col h3{margin:0 0 10px;font-size:13px;color:var(--text-dark);}
   .detail-empty{color:var(--muted-on-light);font-size:12.5px;line-height:1.6;text-align:center;padding:40px 10px;}
   .detail-empty svg{display:block;margin:0 auto 10px;color:var(--border-light);}
   .detail-thumb{width:100%;height:150px;border-radius:10px;overflow:hidden;background:#eee;margin-bottom:10px;}
@@ -161,12 +162,10 @@
   .card h3{margin:0 0 4px;font-size:13.5px;color:var(--text-dark);}
   .card .card-sub{font-size:10.5px;color:var(--muted-on-light);margin-bottom:12px;}
 
-  .ai-list{list-style:none;margin:0;padding:0;}
-  .ai-list li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--muted-on-light);
-    padding:8px 0;border-bottom:1px solid var(--bg);}
-  .ai-list li:last-child{border-bottom:none;}
   .ai-progress-badge{display:inline-block;background:var(--gold-soft);color:#8A6A10;font-size:10px;
-    font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+    font-weight:700;padding:3px 9px;border-radius:20px;}
+  .card-divider{border:none;border-top:1px solid var(--bg);margin:14px 0 10px;}
+  .ai-inline{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted-on-light);}
 
   .legend-inline{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;}
   .legend-inline span{font-size:11px;color:var(--muted-on-light);display:flex;align-items:center;gap:5px;}
@@ -304,36 +303,32 @@
                 <button onclick="setAllWc1(false)">Hide all</button>
               </div>
             </div>
-            <div class="hint">Click a marker on the map to see its details on the right.</div>
+            <div class="hint">Click a marker on the map to see its details in the bottom-right panel.</div>
           </div>
         </div>
+      </div>
 
-        <div class="detail-col" id="detail-col">
-          <h3>Selected assessment</h3>
-          <div id="detail-body">
-            <div class="detail-empty">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-              Click a marker on the map<br/>to see its details here.
-            </div>
+      <div class="detail-col" id="detail-col">
+        <h3>Selected assessment</h3>
+        <div id="detail-body">
+          <div class="detail-empty">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+            Click a marker on the map<br/>to see its details here.
           </div>
         </div>
       </div>
 
       <div class="secondary-row">
         <div class="card">
-          <div class="ai-progress-badge">In progress</div>
-          <h3>AI Insights</h3>
-          <div class="card-sub">Automated analysis — not live yet</div>
-          <ul class="ai-list">
-            <li>AI-generated insights for CENDERA are still in development. This panel will surface pattern detection and recommendations once the analysis pipeline is built.</li>
-          </ul>
-        </div>
-
-        <div class="card">
           <h3>Assessment Trend</h3>
           <div class="card-sub" id="trend-sub">Real data — grows as new months are added</div>
           <svg id="trend-chart" width="100%" height="150" viewBox="0 0 340 150" preserveAspectRatio="none"></svg>
           <div class="legend-inline" id="trend-legend"></div>
+          <hr class="card-divider">
+          <div class="ai-inline">
+            <span class="ai-progress-badge">AI Insights — in progress</span>
+            <span>Pattern detection &amp; recommendations coming once the analysis pipeline is built.</span>
+          </div>
         </div>
 
         <div class="card">
