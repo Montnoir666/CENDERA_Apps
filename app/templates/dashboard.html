@@ -55,34 +55,34 @@
     padding:0 12px;margin:4px 0 6px;}
   #leftnav .navnotice{margin-top:auto;font-size:10.5px;color:var(--muted);padding:8px 12px;line-height:1.5;}
 
-  /* ---------- main scroll area ---------- */
-  #main{flex:1;overflow-y:auto;background:var(--bg);}
+  /* ---------- main area: everything fits in one screen, no page scroll ---------- */
+  #main{flex:1;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;min-height:0;}
+  .view{flex:1;min-height:0;}
+  .view:not(.active){display:none;}
+  .view.active{display:flex;flex-direction:column;min-height:0;}
   .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--panel);color:var(--text);
     padding:9px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,0.25);
     z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
   .toast.show{opacity:1;}
 
-  .view{display:none;}
-  .view.active{display:block;}
-
   /* ---------- KPI row ---------- */
-  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:18px 20px 0;}
-  .kpi-card{background:var(--white);border-radius:16px;padding:16px 18px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
-    display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .kpi-row{flex:0 0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:14px 20px 0;}
+  .kpi-card{background:var(--white);border-radius:14px;padding:12px 14px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
+    display:flex;flex-direction:column;gap:4px;min-width:0;}
   .kpi-card.total{background:var(--panel);color:var(--text);}
   .kpi-card .kpi-top{display:flex;align-items:center;gap:8px;}
-  .kpi-card .kpi-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
-  .kpi-card .kpi-label{font-size:11px;color:var(--muted-on-light);line-height:1.3;}
+  .kpi-card .kpi-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .kpi-card .kpi-label{font-size:10.5px;color:var(--muted-on-light);line-height:1.25;}
   .kpi-card.total .kpi-label{color:var(--muted);}
-  .kpi-card .kpi-num{font-size:30px;font-weight:800;color:var(--text-dark);line-height:1;}
+  .kpi-card .kpi-num{font-size:24px;font-weight:800;color:var(--text-dark);line-height:1;}
   .kpi-card.total .kpi-num{color:var(--gold);}
-  .kpi-card .kpi-sub{font-size:10.5px;color:var(--muted-on-light);}
+  .kpi-card .kpi-sub{font-size:10px;color:var(--muted-on-light);}
   .kpi-card.total .kpi-sub{color:var(--muted);}
 
-  /* ---------- content row: map + detail panel ---------- */
-  .content-row{display:flex;gap:16px;padding:16px 20px 0;align-items:stretch;}
-  .map-col{flex:3;min-width:0;position:relative;background:var(--white);border-radius:16px;overflow:hidden;
-    box-shadow:0 2px 10px rgba(27,46,34,0.08);height:480px;}
+  /* ---------- content row: map (full width now) ---------- */
+  .content-row{flex:1 1 auto;min-height:160px;display:flex;gap:16px;padding:12px 20px 0;align-items:stretch;}
+  .map-col{flex:1;min-width:0;position:relative;background:var(--white);border-radius:16px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(27,46,34,0.08);height:100%;}
   .mapview{position:absolute;inset:0;display:none;}
   .mapview.active{display:block;}
   .map{width:100%;height:100%;}
@@ -137,47 +137,46 @@
     border-radius:6px;font-size:12px;color:var(--text-dark);cursor:pointer;}
   #layers-menu button:hover{background:var(--bg);}
 
-  /* ---------- detail panel (floating, bottom-right) ---------- */
-  .detail-col{position:fixed;bottom:20px;right:20px;width:300px;max-height:min(60vh,460px);
-    background:var(--white);border-radius:16px;box-shadow:0 10px 32px rgba(0,0,0,0.22);
-    padding:16px;overflow-y:auto;z-index:40;}
-  .detail-col h3{margin:0 0 10px;font-size:13px;color:var(--text-dark);}
-  .detail-empty{color:var(--muted-on-light);font-size:12.5px;line-height:1.6;text-align:center;padding:40px 10px;}
-  .detail-empty svg{display:block;margin:0 auto 10px;color:var(--border-light);}
-  .detail-thumb{width:100%;height:150px;border-radius:10px;overflow:hidden;background:#eee;margin-bottom:10px;}
+  /* ---------- bottom row: trend / distribution / flight summary / detail — all 4 together, fixed height, no page scroll ---------- */
+  .bottom-row{flex:0 0 248px;display:flex;gap:14px;padding:12px 20px 14px;min-height:0;}
+  .card{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(27,46,34,0.08);padding:13px 15px;
+    flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;}
+  .card.wide{flex:1.5;}
+  .card h3{margin:0 0 2px;font-size:12.5px;color:var(--text-dark);flex:0 0 auto;}
+  .card .card-sub{font-size:9.5px;color:var(--muted-on-light);margin-bottom:6px;flex:0 0 auto;}
+  .card-body{flex:1;min-height:0;overflow-y:auto;}
+
+  .ai-progress-badge{display:inline-block;background:var(--gold-soft);color:#8A6A10;font-size:9.5px;
+    font-weight:700;padding:2px 8px;border-radius:20px;}
+  .card-divider{border:none;border-top:1px solid var(--bg);margin:8px 0 6px;flex:0 0 auto;}
+  .ai-inline{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted-on-light);flex:0 0 auto;line-height:1.4;}
+
+  .legend-inline{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:6px;}
+  .legend-inline span{font-size:10px;color:var(--muted-on-light);display:flex;align-items:center;gap:4px;}
+
+  /* ---------- detail panel — a normal card now, not floating ---------- */
+  .detail-col h3{margin:0 0 6px;font-size:12.5px;color:var(--text-dark);}
+  .detail-empty{color:var(--muted-on-light);font-size:11.5px;line-height:1.5;text-align:center;padding:16px 6px;}
+  .detail-empty svg{display:block;margin:0 auto 6px;color:var(--border-light);}
+  .detail-thumb{width:100%;height:80px;border-radius:8px;overflow:hidden;background:#eee;margin-bottom:6px;flex:0 0 auto;}
   .detail-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
-  .detail-badge{display:inline-block;background:var(--panel);color:var(--gold);font-weight:700;font-size:10px;
-    padding:3px 9px;border-radius:5px;margin-bottom:8px;}
-  .detail-coord{display:inline-block;background:var(--bg);color:var(--panel);font-weight:700;font-size:11.5px;
-    padding:4px 10px;border-radius:6px;margin-bottom:10px;}
-  .detail-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted-on-light);
-    padding:6px 0;border-bottom:1px solid var(--bg);}
+  .detail-badge{display:inline-block;background:var(--panel);color:var(--gold);font-weight:700;font-size:9.5px;
+    padding:2px 8px;border-radius:5px;margin-bottom:5px;}
+  .detail-coord{display:inline-block;background:var(--bg);color:var(--panel);font-weight:700;font-size:10.5px;
+    padding:3px 8px;border-radius:6px;margin-bottom:6px;}
+  .detail-row{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted-on-light);
+    padding:3px 0;border-bottom:1px solid var(--bg);}
   .detail-row b{color:var(--text-dark);font-weight:600;}
-  .detail-remarks{font-size:12.5px;color:var(--text-dark);margin:10px 0;line-height:1.5;
-    background:var(--bg);padding:10px 12px;border-radius:10px;}
+  .detail-remarks{font-size:10.5px;color:var(--text-dark);margin:6px 0;line-height:1.4;
+    background:var(--bg);padding:6px 8px;border-radius:8px;}
 
-  /* ---------- secondary row: AI / trend / distribution ---------- */
-  .secondary-row{display:flex;gap:16px;padding:16px 20px 0;flex-wrap:wrap;}
-  .card{background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);padding:16px 18px;flex:1;min-width:260px;}
-  .card h3{margin:0 0 4px;font-size:13.5px;color:var(--text-dark);}
-  .card .card-sub{font-size:10.5px;color:var(--muted-on-light);margin-bottom:12px;}
-
-  .ai-progress-badge{display:inline-block;background:var(--gold-soft);color:#8A6A10;font-size:10px;
-    font-weight:700;padding:3px 9px;border-radius:20px;}
-  .card-divider{border:none;border-top:1px solid var(--bg);margin:14px 0 10px;}
-  .ai-inline{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--muted-on-light);}
-
-  .legend-inline{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;}
-  .legend-inline span{font-size:11px;color:var(--muted-on-light);display:flex;align-items:center;gap:5px;}
-
-  /* ---------- flight summary ---------- */
-  .flight-section{padding:16px 20px 24px;}
-  .flight-table-wrap{background:var(--white);border-radius:16px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
-    overflow-x:auto;padding:6px;}
-  table.flight-table{border-collapse:collapse;width:100%;font-size:12px;}
-  table.flight-table th{text-align:left;color:var(--muted-on-light);font-weight:700;font-size:10.5px;
-    text-transform:uppercase;letter-spacing:0.4px;padding:12px 14px;border-bottom:2px solid var(--bg);white-space:nowrap;}
-  table.flight-table td{padding:11px 14px;border-bottom:1px solid var(--bg);color:var(--text-dark);white-space:nowrap;}
+  /* ---------- flight summary table ---------- */
+  .flight-table-wrap{flex:1;min-height:0;overflow:auto;}
+  table.flight-table{border-collapse:collapse;width:100%;font-size:10.5px;}
+  table.flight-table th{text-align:left;color:var(--muted-on-light);font-weight:700;font-size:9px;
+    text-transform:uppercase;letter-spacing:0.3px;padding:6px 8px;border-bottom:2px solid var(--bg);
+    white-space:nowrap;position:sticky;top:0;background:var(--white);}
+  table.flight-table td{padding:6px 8px;border-bottom:1px solid var(--bg);color:var(--text-dark);white-space:nowrap;}
   table.flight-table tr:last-child td{border-bottom:none;}
   table.flight-table td.muted{color:var(--muted-on-light);}
 
@@ -308,49 +307,39 @@
         </div>
       </div>
 
-      <div class="detail-col" id="detail-col">
-        <h3>Selected assessment</h3>
-        <div id="detail-body">
-          <div class="detail-empty">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-            Click a marker on the map<br/>to see its details here.
-          </div>
-        </div>
-      </div>
-
-      <div class="secondary-row">
+      <div class="bottom-row">
         <div class="card">
           <h3>Assessment Trend</h3>
           <div class="card-sub" id="trend-sub">Real data — grows as new months are added</div>
-          <svg id="trend-chart" width="100%" height="150" viewBox="0 0 340 150" preserveAspectRatio="none"></svg>
-          <div class="legend-inline" id="trend-legend"></div>
-          <hr class="card-divider">
-          <div class="ai-inline">
-            <span class="ai-progress-badge">AI Insights — in progress</span>
-            <span>Pattern detection &amp; recommendations coming once the analysis pipeline is built.</span>
+          <div class="card-body">
+            <svg id="trend-chart" width="100%" height="80" viewBox="0 0 340 80" preserveAspectRatio="none"></svg>
+            <div class="legend-inline" id="trend-legend"></div>
+            <hr class="card-divider">
+            <div class="ai-inline">
+              <span class="ai-progress-badge">AI Insights — in progress</span>
+              <span>Pattern detection &amp; recommendations coming once the analysis pipeline is built.</span>
+            </div>
           </div>
         </div>
 
         <div class="card">
           <h3>Assessment Type Distribution</h3>
           <div class="card-sub">This month</div>
-          <div style="display:flex;align-items:center;gap:16px;">
-            <svg id="donut-chart" width="120" height="120" viewBox="0 0 120 120"></svg>
-            <div class="legend-inline" id="donut-legend" style="flex-direction:column;gap:6px;"></div>
+          <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+            <svg id="donut-chart" width="90" height="90" viewBox="0 0 120 120" style="flex:0 0 auto;"></svg>
+            <div class="legend-inline" id="donut-legend" style="flex-direction:column;gap:4px;"></div>
           </div>
         </div>
-      </div>
 
-      <div class="flight-section">
-        <div class="card" style="margin-bottom:0;">
+        <div class="card wide">
           <h3>Flight Technical Summary</h3>
-          <div class="card-sub">Real telemetry, scoped to flights with assessment data. Blank cells = no matching telemetry log found.</div>
+          <div class="card-sub">Real telemetry, scoped to flights with assessment data. Blank = no matching telemetry log.</div>
           <div class="flight-table-wrap">
             <table class="flight-table">
               <thead><tr>
                 <th>Flight</th><th>Date</th><th>Time</th><th>Duration</th>
-                <th>Avg Altitude</th><th>Max Altitude</th><th>Avg Speed</th><th>Avg Signal</th>
-                <th>Frames Captured</th><th>Frames Retained</th>
+                <th>Avg Alt</th><th>Max Alt</th><th>Avg Speed</th><th>Avg Signal</th>
+                <th>Captured</th><th>Retained</th>
               </tr></thead>
               <tbody>
                 {% for r in flight_rows %}
@@ -369,6 +358,16 @@
                 {% endfor %}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <div class="card detail-col" id="detail-col">
+          <h3>Selected assessment</h3>
+          <div class="card-body" id="detail-body">
+            <div class="detail-empty">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+              Click a marker on the map to see its details here.
+            </div>
           </div>
         </div>
       </div>
@@ -538,7 +537,7 @@ function renderDonut(){
 function renderTrend(){
   const svg = document.getElementById("trend-chart");
   const legend = document.getElementById("trend-legend");
-  const W = 340, H = 150, padL = 28, padB = 20, padT = 10, padR = 10;
+  const W = 340, H = 80, padL = 24, padB = 14, padT = 8, padR = 10;
   const months = TREND_DATA.map(d => d.month);
   const types = Object.keys(WC1_COLORS);
   let maxVal = 1;
