@@ -371,17 +371,14 @@
     <div id="view_bunch" class="view">
       <div id="body-legacy">
         <div id="sidebar-legacy">
-          <div class="sidebar-title">Days to ripe (predicted)</div>
-          <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe now (0&ndash;3 d)</div>
-          <div class="legend-row"><span class="dot" style="background:#F17105"></span> Near-ripe (4&ndash;10 d)</div>
-          <div class="legend-row"><span class="dot" style="background:#F2C200"></span> Developing (11&ndash;21 d)</div>
-          <div class="legend-row"><span class="dot" style="background:#2E8B57"></span> Early (&gt;21 d)</div>
-          <div class="hint" style="margin-top:14px;">Placeholder data for WC2 &mdash; not a real prediction yet.</div>
+          <div class="sidebar-title">Bunch type</div>
+          <div class="legend-row"><span class="dot" style="background:#2B2B2B"></span> Black Bunch (<span id="bunch-count-black">0</span>)</div>
+          <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe Bunch (<span id="bunch-count-ripe">0</span>)</div>
+          <div class="hint" style="margin-top:14px;">Real detections from drone footage. Not every detection has a viewable frame — those still show on the map, just without a thumbnail.</div>
         </div>
         <div id="map-wrap-legacy">
           <div id="v_bunch" class="mapview active">
             <div id="map_bunch" class="map"></div>
-            <div class="banner">MOCK DATA &mdash; placeholder for WC2 (not real)</div>
           </div>
         </div>
       </div>
@@ -421,6 +418,8 @@ const ESTATES = {{ estates|tojson }};
 const MONTHS = {{ months|tojson }};
 const DATES = {{ dates|tojson }};
 const BUNCH = {{ bunch_markers|tojson }};
+const BUNCH_COLORS = {{ bunch_colors|tojson }};
+const BUNCH_COUNTS = {{ bunch_counts|tojson }};
 const YIELD = {{ yield_markers|tojson }};
 const CENTER = {{ center|tojson }};
 const TOTAL_ASSESSMENTS = {{ total_assessments|tojson }};
@@ -629,14 +628,21 @@ function initMap(){
   maps.bunch = new google.maps.Map(document.getElementById("map_bunch"),
     {zoom: 18, center: CENTER, mapTypeId: "hybrid"});
   const iw2 = new google.maps.InfoWindow();
+  document.getElementById("bunch-count-black").textContent = BUNCH_COUNTS["Black Bunch"] || 0;
+  document.getElementById("bunch-count-ripe").textContent = BUNCH_COUNTS["Ripe Bunch"] || 0;
   BUNCH.forEach(m => {
-    const c = m.days <= 3 ? "#D7263D" : m.days <= 10 ? "#F17105" : m.days <= 21 ? "#F2C200" : "#2E8B57";
-    const mk = new google.maps.Marker({position: {lat: m.lat, lng: m.lng}, map: maps.bunch, icon: circle(c, 7), title: m.stage});
+    const c = BUNCH_COLORS[m.type] || "#888888";
+    const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng}, map: maps.bunch, icon: circle(c, 7), title: m.type});
     mk.addListener("click", () => {
-      iw2.setContent('<div class="iw"><div class="badge" style="position:static;display:inline-block;margin-bottom:6px;">' + m.stage + '</div>' +
+      const mediaSrc = m.img ? "/media/bunch/" + m.img : "";
+      const thumb = mediaSrc
+        ? '<img src="' + mediaSrc + '" alt="frame" style="width:100%;max-width:220px;border-radius:8px;margin-bottom:8px;cursor:zoom-in;" onclick="openLightbox(\'' + mediaSrc + '\')" onerror="this.style.display=\'none\'">'
+        : '';
+      iw2.setContent('<div class="iw">' + thumb +
+        '<div class="badge" style="position:static;display:inline-block;margin-bottom:6px;background:' + c + ';">' + m.type + '</div>' +
         '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
-        '<div class="subtitle">Palm ' + m.palm + '</div>' +
-        '<div class="remarks">Predicted days to ripe: <b>' + m.days + '</b><br/><span style="color:#D7263D">(mock value)</span></div></div>');
+        '<div class="subtitle">' + m.estate + ' &middot; ' + m.date + '</div>' +
+        (m.confidence != null ? '<div class="remarks">Confidence: <b>' + Math.round(m.confidence * 100) + '%</b></div>' : '') + '</div>');
       iw2.open({anchor: mk, map: maps.bunch});
     });
   });

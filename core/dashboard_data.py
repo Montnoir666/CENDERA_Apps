@@ -22,6 +22,12 @@ WC1_COLORS = {
     "Ground Condition":               "#1F6FEB",
     "Unclassified":                   "#888888",
 }
+BUNCH_INPUT_XLSX = os.path.join(PROJECT_ROOT, "outputs", "Bunch_development_synced.xlsx")
+BUNCH_COLORS = {
+    "Black Bunch":  "#2B2B2B",
+    "Ripe Bunch":   "#D7263D",
+    "Unclassified": "#888888",
+}
 DECLUTTER_RADIUS_M = 2.0
 
 
@@ -81,6 +87,46 @@ def load_wc1(allowed_estates=None):
     else:
         center = {"lat": 0.0, "lng": 0.0}
     return markers, counts, estates, months, center
+
+
+def load_bunch(allowed_estates=None):
+    """Real bunch-detection markers (Black Bunch / Ripe Bunch) from
+    outputs/Bunch_development_synced.xlsx. [] / {} / [] / [] / origin if
+    the file hasn't been built yet (run scripts/build_bunch_development.py)."""
+    try:
+        df = pd.read_excel(BUNCH_INPUT_XLSX, sheet_name="detections")
+    except FileNotFoundError:
+        return [], {}, [], [], {"lat": 0.0, "lng": 0.0}
+    df = df.dropna(subset=["latitude", "longitude"])
+    df = df[(df["latitude"] != 0) & (df["longitude"] != 0)]
+    if allowed_estates is not None:
+        df = df[df["estate"].isin(allowed_estates)]
+
+    def c(v):
+        return "" if pd.isna(v) else str(v)
+
+    markers = []
+    for _, r in df.iterrows():
+        t = c(r.get("detected_class")).strip() or "Unclassified"
+        if t not in BUNCH_COLORS:
+            t = "Unclassified"
+        markers.append({
+            "lat": float(r["latitude"]), "lng": float(r["longitude"]), "type": t,
+            "confidence": round(float(r["confidence"]), 3) if pd.notna(r.get("confidence")) else None,
+            "estate": c(r.get("estate")) or "Unassigned",
+            "date": c(r.get("assessment_date")) or "unknown",
+            "img": c(r.get("frame_relpath")), "frame": c(r.get("frame_filename")),
+        })
+    declutter(markers, DECLUTTER_RADIUS_M)
+    counts = {t: sum(1 for m in markers if m["type"] == t) for t in BUNCH_COLORS}
+    counts = {t: n for t, n in counts.items() if n > 0}
+    estates = sorted({m["estate"] for m in markers})
+    dates = sorted({m["date"] for m in markers})
+    if len(df):
+        center = {"lat": df["latitude"].mean(), "lng": df["longitude"].mean()}
+    else:
+        center = {"lat": 0.0, "lng": 0.0}
+    return markers, counts, estates, dates, center
 
 
 def mock_bunch(center):

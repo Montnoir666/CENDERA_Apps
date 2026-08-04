@@ -38,6 +38,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-only-insecure-secret-change-m
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
 DATA_ROOT = os.path.join(PROJECT_ROOT, "data", "Agronomic Assessment")
+BUNCH_DATA_ROOT = os.path.join(PROJECT_ROOT, "data", "Bunch Development")
 
 
 def login_required(view):
@@ -97,6 +98,8 @@ def index(user):
     for est in estates:
         flight_rows.extend(fd.flight_summary(est))
 
+    bunch, bunch_counts, bunch_estates, bunch_dates, _ = dd.load_bunch(allowed_estates=allowed)
+
     return render_template(
         "dashboard.html",
         username=session["user"],
@@ -108,7 +111,9 @@ def index(user):
         estates=estates,
         months=months,
         dates=dates,
-        bunch_markers=dd.mock_bunch(center),
+        bunch_markers=bunch,
+        bunch_colors=dd.BUNCH_COLORS,
+        bunch_counts=bunch_counts,
         yield_markers=dd.mock_yield(center),
         center=center,
         total_assessments=total,
@@ -128,6 +133,21 @@ def media(user, filepath):
             abort(404)
     full = os.path.abspath(os.path.join(DATA_ROOT, filepath))
     if not full.startswith(DATA_ROOT + os.sep):
+        abort(404)
+    directory, filename = os.path.split(full)
+    return send_from_directory(directory, filename)
+
+
+@app.route("/media/bunch/<path:filepath>")
+@login_required
+def bunch_media(user, filepath):
+    allowed = allowed_estates_for(user)
+    if allowed is not None:
+        estate = filepath.split("/", 1)[0]
+        if estate not in allowed:
+            abort(404)
+    full = os.path.abspath(os.path.join(BUNCH_DATA_ROOT, filepath))
+    if not full.startswith(BUNCH_DATA_ROOT + os.sep):
         abort(404)
     directory, filename = os.path.split(full)
     return send_from_directory(directory, filename)
