@@ -294,9 +294,9 @@
           <div class="card">
             <h3>Assessment Trend</h3>
             <div class="card-sub" id="trend-sub">Real data — grows as new months are added</div>
-            <div class="card-body">
-              <svg id="trend-chart" width="100%" height="130" viewBox="0 0 260 130" preserveAspectRatio="none"></svg>
-              <div class="legend-inline" id="trend-legend"></div>
+            <div class="card-body" style="display:flex;flex-direction:column;min-height:0;">
+              <svg id="trend-chart" style="flex:1;min-height:60px;width:100%;display:block;" preserveAspectRatio="none"></svg>
+              <div class="legend-inline" id="trend-legend" style="flex:0 0 auto;"></div>
               <hr class="card-divider">
               <div class="ai-inline">
                 <span class="ai-progress-badge">AI Insights — in progress</span>
@@ -549,7 +549,10 @@ function renderDonut(){
 function renderTrend(){
   const svg = document.getElementById("trend-chart");
   const legend = document.getElementById("trend-legend");
-  const W = 260, H = 130, padL = 24, padB = 16, padT = 8, padR = 10;
+  const rect = svg.getBoundingClientRect();
+  const W = rect.width || 260, H = rect.height || 130;
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  const padL = 24, padB = 16, padT = 8, padR = 10;
   const months = TREND_DATA.map(d => d.month);
   const types = Object.keys(WC1_COLORS);
   let maxVal = 1;
