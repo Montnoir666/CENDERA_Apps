@@ -74,6 +74,7 @@
 
   /* ---------- KPI row ---------- */
   .kpi-row{flex:0 0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:0 20px;}
+  #bunch-kpi-row{grid-template-columns:repeat(3,1fr);}
   .kpi-card{background:var(--white);border-radius:14px;padding:11px 14px;box-shadow:0 2px 10px rgba(27,46,34,0.08);
     display:flex;flex-direction:column;gap:5px;min-width:0;}
   .kpi-card.total{background:var(--panel);color:var(--text);}
@@ -116,17 +117,17 @@
   .map-btn{position:absolute;z-index:7;background:var(--white);border:1px solid var(--border-light);
     border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;color:var(--text-dark);cursor:pointer;
     display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
-  #btn-filters{top:14px;left:14px;}
-  #btn-layers{top:14px;right:54px;}
-  #btn-fullscreen{top:14px;right:14px;padding:8px;}
+  .map-btn.btn-filters{top:14px;left:14px;}
+  .map-btn.btn-layers{top:14px;right:54px;}
+  .map-btn.btn-fullscreen{top:14px;right:14px;padding:8px;}
 
-  #filters-drawer{position:absolute;top:0;left:0;bottom:0;width:270px;background:var(--white);z-index:9;
+  .filters-drawer{position:absolute;top:0;left:0;bottom:0;width:270px;background:var(--white);z-index:9;
     box-shadow:4px 0 20px rgba(0,0,0,0.15);padding:16px;overflow-y:auto;transform:translateX(-100%);
     transition:transform .2s;}
-  #filters-drawer.open{transform:translateX(0);}
-  #filters-drawer .fd-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-  #filters-drawer .fd-head h3{margin:0;font-size:14px;color:var(--text-dark);}
-  #filters-drawer .fd-close{cursor:pointer;color:var(--muted-on-light);background:none;border:none;font-size:16px;}
+  .filters-drawer.open{transform:translateX(0);}
+  .filters-drawer .fd-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .filters-drawer .fd-head h3{margin:0;font-size:14px;color:var(--text-dark);}
+  .filters-drawer .fd-close{cursor:pointer;color:var(--muted-on-light);background:none;border:none;font-size:16px;}
   .sidebar-title{font-size:10.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--panel);
     margin:0 0 9px;font-weight:700;}
   .sidebar-section{margin-bottom:18px;}
@@ -153,12 +154,12 @@
   .dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);flex:0 0 auto;}
   .hint{font-size:11px;color:var(--panel);line-height:1.5;}
 
-  #layers-menu{position:absolute;top:52px;right:54px;z-index:8;background:var(--white);border-radius:10px;
+  .layers-menu{position:absolute;top:52px;right:54px;z-index:8;background:var(--white);border-radius:10px;
     box-shadow:0 6px 20px rgba(0,0,0,0.18);padding:8px;display:none;min-width:130px;}
-  #layers-menu.open{display:block;}
-  #layers-menu button{display:block;width:100%;text-align:left;background:none;border:none;padding:7px 10px;
+  .layers-menu.open{display:block;}
+  .layers-menu button{display:block;width:100%;text-align:left;background:none;border:none;padding:7px 10px;
     border-radius:6px;font-size:12px;color:var(--text-dark);cursor:pointer;}
-  #layers-menu button:hover{background:var(--bg);}
+  .layers-menu button:hover{background:var(--bg);}
 
   /* ---------- detail panel — floating over the map, bottom-right ---------- */
   .detail-col{position:absolute;bottom:16px;right:16px;width:270px;max-height:min(70%,480px);
@@ -310,24 +311,24 @@
           <div id="v_wc1" class="mapview active">
             <div id="map_wc1" class="map"></div>
           </div>
-          <button class="map-btn" id="btn-filters" onclick="toggleFilters()">
+          <button class="map-btn btn-filters" id="btn-filters" onclick="toggleFilters()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
             Filters
           </button>
-          <button class="map-btn" id="btn-layers" onclick="toggleLayers()">
+          <button class="map-btn btn-layers" id="btn-layers" onclick="toggleLayers()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             Layers
           </button>
-          <button class="map-btn" id="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
+          <button class="map-btn btn-fullscreen" id="btn-fullscreen" onclick="toggleFullscreen()" title="Fullscreen">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
           </button>
-          <div id="layers-menu">
+          <div class="layers-menu" id="layers-menu">
             <button onclick="setMapType('wc1','hybrid')">Satellite + labels</button>
             <button onclick="setMapType('wc1','satellite')">Satellite</button>
             <button onclick="setMapType('wc1','roadmap')">Roadmap</button>
           </div>
 
-          <div id="filters-drawer">
+          <div class="filters-drawer" id="filters-drawer">
             <div class="fd-head"><h3>Filters</h3><button class="fd-close" onclick="toggleFilters()">&times;</button></div>
             <div class="sidebar-section">
               <div class="search-box">
@@ -369,16 +370,83 @@
 
     <!-- ================= Bunch Development (unchanged legacy layout) ================= -->
     <div id="view_bunch" class="view">
-      <div id="body-legacy">
-        <div id="sidebar-legacy">
-          <div class="sidebar-title">Bunch type</div>
-          <div class="legend-row"><span class="dot" style="background:#2B2B2B"></span> Black Bunch (<span id="bunch-count-black">0</span>)</div>
-          <div class="legend-row"><span class="dot" style="background:#D7263D"></span> Ripe Bunch (<span id="bunch-count-ripe">0</span>)</div>
-          <div class="hint" style="margin-top:14px;">Real detections from drone footage. Not every detection has a viewable frame — those still show on the map, just without a thumbnail.</div>
+      <div class="kpi-row" id="bunch-kpi-row"></div>
+
+      <div class="content-row">
+        <div class="side-charts">
+          <div class="card">
+            <h3>To be designed</h3>
+            <div class="card-sub">Content to be decided</div>
+            <div class="card-body">
+              <div class="detail-empty">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="16.5" x2="12.01" y2="16.5"/></svg>
+                Card content to be designed later.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>To be designed</h3>
+            <div class="card-sub">Content to be decided</div>
+            <div class="card-body">
+              <div class="detail-empty">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="16.5" x2="12.01" y2="16.5"/></svg>
+                Card content to be designed later.
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="map-wrap-legacy">
+
+        <div class="map-col">
           <div id="v_bunch" class="mapview active">
             <div id="map_bunch" class="map"></div>
+          </div>
+          <button class="map-btn btn-filters" id="btn-filters-bunch" onclick="toggleFilters('bunch')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+            Filters
+          </button>
+          <button class="map-btn btn-layers" id="btn-layers-bunch" onclick="toggleLayers('bunch')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Layers
+          </button>
+          <button class="map-btn btn-fullscreen" id="btn-fullscreen-bunch" onclick="toggleFullscreen('bunch')" title="Fullscreen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+          <div class="layers-menu" id="layers-menu-bunch">
+            <button onclick="setMapType('bunch','hybrid')">Satellite + labels</button>
+            <button onclick="setMapType('bunch','satellite')">Satellite</button>
+            <button onclick="setMapType('bunch','roadmap')">Roadmap</button>
+          </div>
+
+          <div class="filters-drawer" id="filters-drawer-bunch">
+            <div class="fd-head"><h3>Filters</h3><button class="fd-close" onclick="toggleFilters('bunch')">&times;</button></div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Bunch type</div>
+              <div id="bunch_toggles" class="type-grid"></div>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Estate</div>
+              <select id="fb_estate" class="side-select" onchange="recomputeBunch()"></select>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-title">Detection date</div>
+              <select id="fb_date" class="side-select" onchange="recomputeBunch()"></select>
+              <div class="side-btns">
+                <button onclick="setAllBunch(true)">Show all</button>
+                <button onclick="setAllBunch(false)">Hide all</button>
+              </div>
+            </div>
+            <div class="hint">Not every detection has a viewable frame — those still show on the map, just without a thumbnail.</div>
+          </div>
+
+          <div class="detail-col" id="bunch-detail-col">
+            <h3>Selected detection</h3>
+            <div class="card-body" id="bunch-detail-body">
+              <div class="detail-empty">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+                Click a marker on the map to see its details here.
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -436,7 +504,9 @@ const TYPE_ICONS = {
 
 const maps = {};
 let wc1Recs = [];
+let bunchRecs = [];
 const typeState = {};
+const bunchTypeState = {};
 let toastTimer = null;
 
 function toast(msg){
@@ -474,14 +544,14 @@ function fillSelect(id, values){
   values.forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v; s.appendChild(o); });
 }
 
-function toggleFilters(){ document.getElementById("filters-drawer").classList.toggle("open"); }
-function toggleLayers(){ document.getElementById("layers-menu").classList.toggle("open"); }
+function toggleFilters(view){ document.getElementById("filters-drawer" + (view ? "-" + view : "")).classList.toggle("open"); }
+function toggleLayers(view){ document.getElementById("layers-menu" + (view ? "-" + view : "")).classList.toggle("open"); }
 function setMapType(name, type){
   if (maps[name]) maps[name].setMapTypeId(type);
-  document.getElementById("layers-menu").classList.remove("open");
+  document.getElementById("layers-menu" + (name !== "wc1" ? "-" + name : "")).classList.remove("open");
 }
-function toggleFullscreen(){
-  const el = document.querySelector("#view_wc1 .map-col");
+function toggleFullscreen(view){
+  const el = document.querySelector("#view_" + (view || "wc1") + " .map-col");
   if (!document.fullscreenElement) el.requestFullscreen().catch(() => {});
   else document.exitFullscreen();
 }
@@ -518,6 +588,41 @@ function renderDetail(m){
     '<div class="detail-row"><span>Video</span><b>' + m.video + '</b></div>' +
     (m.dt ? '<div class="detail-row"><span>Time</span><b>' + m.dt + '</b></div>' : '') +
     (m.remarks ? '<div class="detail-remarks">' + m.remarks + '</div>' : '');
+}
+
+function renderBunchKpis(){
+  const row = document.getElementById("bunch-kpi-row");
+  const total = BUNCH.length;
+  const totalCard = document.createElement("div");
+  totalCard.className = "kpi-card total";
+  totalCard.innerHTML = '<div class="kpi-label">Total Detections</div><div class="kpi-num">' + total + '</div><div class="kpi-sub">All estates</div>';
+  row.appendChild(totalCard);
+  Object.keys(BUNCH_COUNTS).forEach(t => {
+    const n = BUNCH_COUNTS[t];
+    const pct = total ? Math.round(n / total * 1000) / 10 : 0;
+    const c = document.createElement("div");
+    c.className = "kpi-card";
+    c.innerHTML =
+      '<div class="kpi-top"><div class="kpi-icon" style="background:' + (BUNCH_COLORS[t] || "#888") + '"></div>' +
+      '<div class="kpi-label">' + t + '</div></div>' +
+      '<div class="kpi-num">' + n + '</div><div class="kpi-sub">' + pct + '% of total</div>';
+    row.appendChild(c);
+  });
+}
+
+function renderBunchDetail(m){
+  const body = document.getElementById("bunch-detail-body");
+  const mediaSrc = m.img ? "/media/bunch/" + m.img : "";
+  const img = m.img
+    ? '<div class="detail-thumb" onclick="openLightbox(\'' + mediaSrc + '\')"><img src="' + mediaSrc + '" alt="frame" onerror="this.parentElement.style.display=\'none\'"><span class="zoom-hint">Click to enlarge</span></div>'
+    : '';
+  body.innerHTML = img +
+    '<div class="detail-badge">' + m.type + '</div><br/>' +
+    '<div class="detail-coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
+    '<div class="detail-row"><span>Estate</span><b>' + m.estate + '</b></div>' +
+    '<div class="detail-row"><span>Date</span><b>' + m.date + '</b></div>' +
+    (m.confidence != null ? '<div class="detail-row"><span>Confidence</span><b>' + Math.round(m.confidence * 100) + '%</b></div>' : '') +
+    (m.frame ? '<div class="detail-row"><span>Frame</span><b>' + m.frame + '</b></div>' : '');
 }
 
 function renderDonut(){
@@ -627,24 +732,32 @@ function initMap(){
 
   maps.bunch = new google.maps.Map(document.getElementById("map_bunch"),
     {zoom: 18, center: CENTER, mapTypeId: "hybrid"});
-  const iw2 = new google.maps.InfoWindow();
-  document.getElementById("bunch-count-black").textContent = BUNCH_COUNTS["Black Bunch"] || 0;
-  document.getElementById("bunch-count-ripe").textContent = BUNCH_COUNTS["Ripe Bunch"] || 0;
   BUNCH.forEach(m => {
     const c = BUNCH_COLORS[m.type] || "#888888";
-    const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng}, map: maps.bunch, icon: circle(c, 7, "#fff", 1.5), title: m.type});
-    mk.addListener("click", () => {
-      const mediaSrc = m.img ? "/media/bunch/" + m.img : "";
-      const thumb = mediaSrc
-        ? '<img src="' + mediaSrc + '" alt="frame" style="width:100%;max-width:220px;border-radius:8px;margin-bottom:8px;cursor:zoom-in;" onclick="openLightbox(\'' + mediaSrc + '\')" onerror="this.style.display=\'none\'">'
-        : '';
-      iw2.setContent('<div class="iw">' + thumb +
-        '<div class="badge" style="position:static;display:inline-block;margin-bottom:6px;background:' + c + ';">' + m.type + '</div>' +
-        '<div class="title">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
-        '<div class="subtitle">' + m.estate + ' &middot; ' + m.date + '</div>' +
-        (m.confidence != null ? '<div class="remarks">Confidence: <b>' + Math.round(m.confidence * 100) + '%</b></div>' : '') + '</div>');
-      iw2.open({anchor: mk, map: maps.bunch});
+    const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng},
+      map: maps.bunch, title: m.type, icon: circle(c, 7, "#fff", 1.5)});
+    mk.addListener("click", () => renderBunchDetail(m));
+    bunchRecs.push({marker: mk, type: m.type, estate: m.estate, date: m.date});
+  });
+
+  fillSelect("fb_estate", [...new Set(BUNCH.map(m => m.estate))].sort());
+  fillSelect("fb_date", [...new Set(BUNCH.map(m => m.date))].sort());
+
+  const btg = document.getElementById("bunch_toggles");
+  Object.keys(BUNCH_COUNTS).forEach(t => {
+    bunchTypeState[t] = true;
+    const id = "cbb_" + t.replace(/[^a-z0-9]/gi, "");
+    const card = document.createElement("div");
+    card.className = "type-card active";
+    card.id = id;
+    card.innerHTML = '<div class="swatch" style="background:' + BUNCH_COLORS[t] + '"></div>' +
+      '<div class="label">' + t + '</div><div class="count">' + BUNCH_COUNTS[t] + '</div>';
+    card.addEventListener("click", () => {
+      bunchTypeState[t] = !bunchTypeState[t];
+      card.classList.toggle("active", bunchTypeState[t]);
+      recomputeBunch();
     });
+    btg.appendChild(card);
   });
 
   maps.yield = new google.maps.Map(document.getElementById("map_yield"),
@@ -666,6 +779,9 @@ function initMap(){
   renderDonut();
   renderTrend();
   recomputeWc1();
+
+  renderBunchKpis();
+  recomputeBunch();
 }
 
 function recomputeWc1(){
@@ -706,11 +822,35 @@ function setAllWc1(v){
   recomputeWc1();
 }
 
+function recomputeBunch(){
+  const est = document.getElementById("fb_estate").value;
+  const dt = document.getElementById("fb_date").value;
+  const bounds = new google.maps.LatLngBounds();
+  let shown = 0;
+  bunchRecs.forEach(r => {
+    const vis = (bunchTypeState[r.type] !== false)
+      && (est === "__all" || r.estate === est)
+      && (dt === "__all" || r.date === dt);
+    r.marker.setVisible(vis);
+    if (vis){ bounds.extend(r.marker.getPosition()); shown++; }
+  });
+  if (shown > 0) maps.bunch.fitBounds(bounds);
+}
+
+function setAllBunch(v){
+  Object.keys(bunchTypeState).forEach(t => {
+    bunchTypeState[t] = v;
+    const card = document.getElementById("cbb_" + t.replace(/[^a-z0-9]/gi, ""));
+    if (card) card.classList.toggle("active", v);
+  });
+  recomputeBunch();
+}
+
 document.addEventListener("click", (e) => {
-  const menu = document.getElementById("layers-menu");
-  if (menu.classList.contains("open") && !menu.contains(e.target) && e.target.id !== "btn-layers" && !e.target.closest("#btn-layers")) {
-    menu.classList.remove("open");
-  }
+  if (e.target.closest(".btn-layers")) return;
+  document.querySelectorAll(".layers-menu.open").forEach(menu => {
+    if (!menu.contains(e.target)) menu.classList.remove("open");
+  });
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeLightbox();
