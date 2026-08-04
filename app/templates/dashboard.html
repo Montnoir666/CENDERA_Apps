@@ -463,9 +463,9 @@ function closeLightbox(){
   document.getElementById("lightbox").classList.remove("open");
 }
 
-function circle(color, scale){
+function circle(color, scale, strokeColor, strokeWeight){
   return {path: google.maps.SymbolPath.CIRCLE, fillColor: color, fillOpacity: 0.9,
-          strokeColor: "#333", strokeWeight: 1, scale: scale};
+          strokeColor: strokeColor || "#333", strokeWeight: strokeWeight || 1, scale: scale};
 }
 
 function fillSelect(id, values){
@@ -632,7 +632,7 @@ function initMap(){
   document.getElementById("bunch-count-ripe").textContent = BUNCH_COUNTS["Ripe Bunch"] || 0;
   BUNCH.forEach(m => {
     const c = BUNCH_COLORS[m.type] || "#888888";
-    const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng}, map: maps.bunch, icon: circle(c, 7), title: m.type});
+    const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng}, map: maps.bunch, icon: circle(c, 7, "#fff", 1.5), title: m.type});
     mk.addListener("click", () => {
       const mediaSrc = m.img ? "/media/bunch/" + m.img : "";
       const thumb = mediaSrc
