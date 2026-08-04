@@ -68,6 +68,7 @@ def load_wc1(allowed_estates=None):
             "frame": c(r.get("frame_filename")), "video": c(r.get("video_filename")),
             "estate": c(r.get("estate")) or "Unassigned",
             "month": c(r.get("assessment_month")) or "unknown",
+            "date": c(r.get("assessment_date")) or "unknown",
             "img": c(r.get("frame_relpath")), "dt": c(r.get("frame_absolute_datetime")),
         })
     declutter(markers, DECLUTTER_RADIUS_M)

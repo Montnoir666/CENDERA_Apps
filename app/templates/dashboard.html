@@ -293,7 +293,7 @@
 
           <div class="card">
             <h3>Assessment Trend</h3>
-            <div class="card-sub" id="trend-sub">Real data — grows as new months are added</div>
+            <div class="card-sub" id="trend-sub">Real data — grows as new flight dates are added</div>
             <div class="card-body" style="display:flex;flex-direction:column;min-height:0;">
               <svg id="trend-chart" style="flex:1;min-height:60px;width:100%;display:block;" preserveAspectRatio="none"></svg>
               <div class="legend-inline" id="trend-legend" style="flex:0 0 auto;"></div>
@@ -344,8 +344,8 @@
               <select id="f_estate" class="side-select" onchange="recomputeWc1()"></select>
             </div>
             <div class="sidebar-section">
-              <div class="sidebar-title">Assessment month</div>
-              <select id="f_month" class="side-select" onchange="recomputeWc1()"></select>
+              <div class="sidebar-title">Assessment date</div>
+              <select id="f_date" class="side-select" onchange="recomputeWc1()"></select>
               <div class="side-btns">
                 <button onclick="setAllWc1(true)">Show all</button>
                 <button onclick="setAllWc1(false)">Hide all</button>
@@ -419,6 +419,7 @@ const WC1_COLORS = {{ wc1_colors|tojson }};
 const WC1_COUNTS = {{ wc1_counts|tojson }};
 const ESTATES = {{ estates|tojson }};
 const MONTHS = {{ months|tojson }};
+const DATES = {{ dates|tojson }};
 const BUNCH = {{ bunch_markers|tojson }};
 const YIELD = {{ yield_markers|tojson }};
 const CENTER = {{ center|tojson }};
@@ -513,7 +514,7 @@ function renderDetail(m){
     '<div class="detail-badge">' + m.type + '</div><br/>' +
     '<div class="detail-coord">' + m.lat.toFixed(6) + ', ' + m.lng.toFixed(6) + '</div>' +
     '<div class="detail-row"><span>Estate</span><b>' + m.estate + '</b></div>' +
-    '<div class="detail-row"><span>Month</span><b>' + m.month + '</b></div>' +
+    '<div class="detail-row"><span>Date</span><b>' + m.date + '</b></div>' +
     '<div class="detail-row"><span>Frame</span><b>' + m.frame + '</b></div>' +
     '<div class="detail-row"><span>Video</span><b>' + m.video + '</b></div>' +
     (m.dt ? '<div class="detail-row"><span>Time</span><b>' + m.dt + '</b></div>' : '') +
@@ -553,12 +554,12 @@ function renderTrend(){
   const W = rect.width || 260, H = rect.height || 130;
   svg.setAttribute("viewBox", "0 0 " + W + " " + H);
   const padL = 24, padB = 16, padT = 8, padR = 10;
-  const months = TREND_DATA.map(d => d.month);
+  const dates = TREND_DATA.map(d => d.date);
   const types = Object.keys(WC1_COLORS);
   let maxVal = 1;
   TREND_DATA.forEach(d => types.forEach(t => { maxVal = Math.max(maxVal, d.counts[t] || 0); }));
 
-  const x = i => months.length > 1 ? padL + (i/(months.length-1)) * (W-padL-padR) : (padL + (W-padL-padR)/2);
+  const x = i => dates.length > 1 ? padL + (i/(dates.length-1)) * (W-padL-padR) : (padL + (W-padL-padR)/2);
   const y = v => (H-padB) - (v/maxVal) * (H-padB-padT);
 
   let parts = '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + (W-padR) + '" y2="' + (H-padB) + '" stroke="#eee" stroke-width="1"/>';
@@ -567,14 +568,17 @@ function renderTrend(){
 
   types.forEach(t => {
     const pts = TREND_DATA.map((d,i) => x(i) + "," + y(d.counts[t] || 0));
-    if (months.length === 1) {
+    if (dates.length === 1) {
       parts += '<circle cx="' + x(0) + '" cy="' + y(TREND_DATA[0].counts[t]||0) + '" r="4" fill="' + WC1_COLORS[t] + '"/>';
     } else {
       parts += '<polyline points="' + pts.join(" ") + '" fill="none" stroke="' + WC1_COLORS[t] + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+      TREND_DATA.forEach((d,i) => {
+        parts += '<circle cx="' + x(i) + '" cy="' + y(d.counts[t]||0) + '" r="3" fill="' + WC1_COLORS[t] + '"/>';
+      });
     }
   });
-  months.forEach((m,i) => {
-    parts += '<text x="' + x(i) + '" y="' + (H-4) + '" font-size="8" fill="#5C7267" text-anchor="middle">' + m + '</text>';
+  dates.forEach((d,i) => {
+    parts += '<text x="' + x(i) + '" y="' + (H-4) + '" font-size="8" fill="#5C7267" text-anchor="middle">' + d + '</text>';
   });
   svg.innerHTML = parts;
 
@@ -583,8 +587,10 @@ function renderTrend(){
     row.innerHTML = '<span class="dot" style="background:' + WC1_COLORS[t] + '"></span>' + t;
     legend.appendChild(row);
   });
-  if (months.length < 2) {
-    document.getElementById("trend-sub").textContent = "Only " + months.length + " month of data so far — chart will extend automatically as more months are added.";
+  if (dates.length < 2) {
+    document.getElementById("trend-sub").textContent = "Only " + dates.length + " flight date so far — chart will extend automatically as new dates are added.";
+  } else {
+    document.getElementById("trend-sub").textContent = "Real data across " + dates.length + " flight dates — grows as new dates are added.";
   }
 }
 
@@ -595,12 +601,12 @@ function initMap(){
     const mk = new google.maps.Marker({position: {lat: m.dlat, lng: m.dlng},
       map: maps.wc1, title: m.type, icon: circle(WC1_COLORS[m.type] || "#888", 7)});
     mk.addListener("click", () => renderDetail(m));
-    wc1Recs.push({marker: mk, type: m.type, estate: m.estate, month: m.month,
+    wc1Recs.push({marker: mk, type: m.type, estate: m.estate, date: m.date,
                    remarks: (m.remarks || "").toLowerCase(), frame: (m.frame || "").toLowerCase()});
   });
 
   fillSelect("f_estate", ESTATES);
-  fillSelect("f_month", MONTHS);
+  fillSelect("f_date", DATES);
 
   const tg = document.getElementById("wc1_toggles");
   Object.keys(WC1_COUNTS).forEach(t => {
@@ -658,14 +664,14 @@ function initMap(){
 
 function recomputeWc1(){
   const est = document.getElementById("f_estate").value;
-  const mon = document.getElementById("f_month").value;
+  const dt = document.getElementById("f_date").value;
   const q = document.getElementById("f_search").value.trim().toLowerCase();
   const bounds = new google.maps.LatLngBounds();
   let shown = 0;
   wc1Recs.forEach(r => {
     const vis = (typeState[r.type] !== false)
       && (est === "__all" || r.estate === est)
-      && (mon === "__all" || r.month === mon)
+      && (dt === "__all" || r.date === dt)
       && (!q || r.remarks.includes(q) || r.frame.includes(q));
     r.marker.setVisible(vis);
     if (vis){ bounds.extend(r.marker.getPosition()); shown++; }

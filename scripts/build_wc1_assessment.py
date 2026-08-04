@@ -10,6 +10,7 @@ falling back to a flat scan of the current folder if that has none.
 Adds columns:
     estate            (from the data/<Estate>/ folder)
     assessment_month  (YYYY-MM, from the flight date in the folder name)
+    assessment_date   (YYYY-MM-DD, from the flight date in the folder name)
     frame_relpath     (path to the frame image, relative to this folder;
                        used by the dashboard to show the image)
 plus the two you fill in:  agronomic_assessment_type (drop-down) + remarks.
@@ -55,6 +56,11 @@ def norm(name):
 def month_from_folder(folder_name):
     m = re.search(r"DJI_(\d{4})(\d{2})(\d{2})", folder_name)
     return f"{m.group(1)}-{m.group(2)}" if m else "unknown"
+
+
+def date_from_folder(folder_name):
+    m = re.search(r"DJI_(\d{4})(\d{2})(\d{2})", folder_name)
+    return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else "unknown"
 
 
 def find_frame_column(cols):
@@ -151,7 +157,8 @@ def main():
             lambda k: f"{rel_dir}/{img_map.get(k, '')}")
         matched.insert(0, "estate", estate)
         matched.insert(1, "assessment_month", month_from_folder(name))
-        matched.insert(2, "source_folder", name)
+        matched.insert(2, "assessment_date", date_from_folder(name))
+        matched.insert(3, "source_folder", name)
 
         print(f"[ok]  {estate}/{name}: {len(img_keys)} imgs, {len(df)} rows -> "
               f"{len(matched)} matched")
@@ -196,6 +203,7 @@ def main():
     print(f"Total retained frames: {len(out)}")
     print(f"Estates: {sorted(out['estate'].unique())}")
     print(f"Months:  {sorted(out['assessment_month'].unique())}")
+    print(f"Dates:   {sorted(out['assessment_date'].unique())}")
     print(f"Frame column used: '{frame_col_used}'")
 
     write_excel(out, flight_counts, os.path.join(base, OUTPUT_FILE))

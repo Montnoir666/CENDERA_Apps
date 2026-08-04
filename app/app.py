@@ -81,6 +81,7 @@ def index(user):
     allowed = allowed_estates_for(user)
     wc1, counts, estates, months, center = dd.load_wc1(allowed_estates=allowed)
     scope_label = "All estates" if allowed is None else (", ".join(allowed) or "No estates assigned")
+    dates = sorted({m["date"] for m in wc1})
 
     total = len(wc1)
     kpis = [{"type": t, "count": n, "pct": round(n / total * 100, 1) if total else 0}
@@ -88,9 +89,9 @@ def index(user):
 
     trend = {}
     for m in wc1:
-        bucket = trend.setdefault(m["month"], {})
+        bucket = trend.setdefault(m["date"], {})
         bucket[m["type"]] = bucket.get(m["type"], 0) + 1
-    trend_data = [{"month": mo, "counts": trend[mo]} for mo in sorted(trend)]
+    trend_data = [{"date": d, "counts": trend[d]} for d in sorted(trend)]
 
     flight_rows = []
     for est in estates:
@@ -106,6 +107,7 @@ def index(user):
         wc1_counts=counts,
         estates=estates,
         months=months,
+        dates=dates,
         bunch_markers=dd.mock_bunch(center),
         yield_markers=dd.mock_yield(center),
         center=center,
