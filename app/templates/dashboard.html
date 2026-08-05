@@ -526,6 +526,7 @@ function toggleNavGroup(name){
 }
 
 function openLightbox(src){
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   document.getElementById("lightbox-img").src = src;
   document.getElementById("lightbox").classList.add("open");
 }
